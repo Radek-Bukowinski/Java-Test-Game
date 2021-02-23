@@ -7,20 +7,18 @@ TODO:
 */
 
 
-package com.project.game.framework;
+package com.project.game.main;
 
-import com.project.game.entity.Enemy;
-import com.project.game.entity.Player;
-import com.project.game.entity.Projectile;
 import com.project.game.identifiers.ID;
 import com.project.game.identifiers.STATE;
+import com.project.game.objects.Enemy;
+import com.project.game.objects.Player;
+import com.project.game.objects.Projectile;
 
-import java.awt.event.MouseAdapter;
-import java.util.Random;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -29,17 +27,8 @@ import java.util.concurrent.TimeUnit;
 public class UI extends MouseAdapter {
     private Game game;
     private RendererHandler renderer;
+    private Camera camera;
     private Random random = new Random();
-
-
-    Timer timer = new Timer();
-    TimerTask task = new TimeTaskClass();
-
-    private class TimeTaskClass extends TimerTask{
-        public void run(){
-
-        }
-    }
 
     Font font = new Font("Arial", 1, 20);
 
@@ -51,9 +40,10 @@ public class UI extends MouseAdapter {
     private Color backButtonColor = Color.white;
 
 
-    public UI(Game game, RendererHandler renderer) {
+    public UI(Game game, RendererHandler renderer, Camera camera) {
         this.game = game;
         this.renderer = renderer;
+        this.camera = camera;
     }
 
     GameObject temporaryObject = null;
@@ -73,17 +63,21 @@ public class UI extends MouseAdapter {
     private void shootProjectile(int mouseX, int mouseY){
         GameObject temporaryProjectile = renderer.addObject(new Projectile(temporaryObject.x + 16, temporaryObject.y + 16, 100, ID.Projectile, renderer));
         float angle = (float) Math.atan2(mouseY - temporaryObject.y, mouseX - temporaryObject.x);
-        int projectileVelocity = 15;
+        int projectileVelocity = 5;
         temporaryProjectile.velocityX = (float) ((projectileVelocity) * Math.cos(angle));
         temporaryProjectile.velocityY = (float) ((projectileVelocity) * Math.sin(angle));
+
 
     }
 
     @Override
     public void mousePressed(MouseEvent event) {
         super.mousePressed(event);
-        int mouseX = (int) event.getX();
-        int mouseY = (int) event.getY();
+        int mouseX = (int) (event.getX() + camera.getX());
+        int mouseY = (int) (event.getY() + camera.getY());
+
+        int realMouseX = (int) event.getX();
+        int realMouseY  = (int) event.getY();
 
         System.out.println("mouse pressed");
         if(game.windowSTATE == STATE.Game) {
@@ -98,30 +92,30 @@ public class UI extends MouseAdapter {
         }
 
         if(game.windowSTATE == STATE.Menu) {
-            if (mouseOver(mouseX, mouseY, 540, 315, 200, 40)) {
+            if (mouseOver(realMouseX, realMouseY, 540, 315, 200, 40)) {
                 game.windowSTATE = STATE.Loading;
                 for(int i = 0; i < renderer.objects.size(); i++) {
                     GameObject temporaryObject = renderer.objects.get(i);
                     renderer.removeObject(temporaryObject);
                 }
             }
-            if (mouseOver(mouseX, mouseY, 540, 375, 200, 40)) {
+            if (mouseOver(realMouseX, realMouseY, 540, 375, 200, 40)) {
                 game.windowSTATE = STATE.Info;
             }
 
-            if (mouseOver(mouseX, mouseY, 540, 435, 200, 40)) {
+            if (mouseOver(realMouseX, realMouseY, 540, 435, 200, 40)) {
                 System.exit(0);
             }
         }
 
         if(game.windowSTATE == STATE.Info) {
-            if(mouseOver(mouseX, mouseY, 540, 625, 200, 40)) {
+            if(mouseOver(realMouseX, realMouseY, 540, 625, 200, 40)) {
                 game.windowSTATE = STATE.Menu;
             }
         }
 
         if(game.windowSTATE ==  STATE.Death) {
-            if(mouseOver(mouseX, mouseY,540, 315, 200, 50)) {
+            if(mouseOver(realMouseX, realMouseY,540, 315, 200, 50)) {
                 game.windowSTATE = STATE.Game;
 
                 HUD.health = 100;
@@ -132,7 +126,7 @@ public class UI extends MouseAdapter {
                 renderer.addObject(new Enemy(random.nextInt(Game.WIDTH) - 100, random.nextInt(Game.HEIGHT) - 100, 100, ID.Enemy, renderer));
                 renderer.addObject(new Enemy(random.nextInt(Game.WIDTH) - 100, random.nextInt(Game.HEIGHT) - 100, 100, ID.Enemy, renderer));
             }
-            if(mouseOver(mouseX, mouseY, 540, 375, 200, 50)) {
+            if(mouseOver(realMouseX, realMouseY, 540, 375, 200, 50)) {
                 System.exit(0);
             }
         }

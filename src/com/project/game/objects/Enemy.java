@@ -1,11 +1,11 @@
-package com.project.game.entity;
+package com.project.game.objects;
 
-import com.project.game.framework.Game;
-import com.project.game.framework.GameObject;
-import com.project.game.framework.RendererHandler;
 import com.project.game.identifiers.ID;
+import com.project.game.main.Game;
+import com.project.game.main.GameObject;
+import com.project.game.main.RendererHandler;
+
 import java.awt.*;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class Enemy extends GameObject {
     private RendererHandler renderer;

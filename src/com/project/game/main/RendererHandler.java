@@ -1,4 +1,4 @@
-package com.project.game.framework;
+package com.project.game.main;
 
 import java.awt.*;
 import java.util.LinkedList;

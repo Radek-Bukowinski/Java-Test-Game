@@ -1,10 +1,8 @@
-package com.project.game.framework;
-import com.project.game.entity.Enemy;
-import com.project.game.entity.Player;
-import com.project.game.framework.Game;
-import com.project.game.framework.RendererHandler;
+package com.project.game.main;
+
 import com.project.game.identifiers.ID;
 import com.project.game.identifiers.STATE;
+import com.project.game.objects.Player;
 
 import java.awt.*;
 import java.util.Random;
@@ -70,9 +68,10 @@ public class Loading {
 
         if(progressLevel == 1280) {
             game.windowSTATE = STATE.Game;
+            game.initialiseLevel();
             renderer.addObject(new Player(Game.WIDTH / 2 - 32, Game.HEIGHT / 2 - 32, 100, ID.Player, renderer));
-            renderer.addObject(new Enemy(random.nextInt(Game.WIDTH) - 100, random.nextInt(Game.HEIGHT) - 100, 100, ID.Enemy, renderer));
-            renderer.addObject(new Enemy(random.nextInt(Game.WIDTH) - 100, random.nextInt(Game.HEIGHT) - 100, 100, ID.Enemy, renderer));
+            //renderer.addObject(new Enemy(random.nextInt(Game.WIDTH) - 100, random.nextInt(Game.HEIGHT) - 100, 100, ID.Enemy, renderer));
+            //renderer.addObject(new Enemy(random.nextInt(Game.WIDTH) - 100, random.nextInt(Game.HEIGHT) - 100, 100, ID.Enemy, renderer));
         }
     }
 

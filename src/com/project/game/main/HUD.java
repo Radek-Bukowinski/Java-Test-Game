@@ -1,5 +1,4 @@
-package com.project.game.framework;
-import com.project.game.framework.Game;
+package com.project.game.main;
 
 import java.awt.*;
 

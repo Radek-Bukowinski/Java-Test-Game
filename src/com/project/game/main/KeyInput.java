@@ -1,4 +1,4 @@
-package com.project.game.framework;
+package com.project.game.main;
 
 import com.project.game.identifiers.DIRECTION;
 import com.project.game.identifiers.ID;

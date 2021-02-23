@@ -1,9 +1,9 @@
-package com.project.game.entity;
-import com.project.game.framework.Game;
-import com.project.game.framework.GameObject;
-import com.project.game.framework.HUD;
-import com.project.game.framework.RendererHandler;
+package com.project.game.objects;
+
 import com.project.game.identifiers.ID;
+import com.project.game.main.GameObject;
+import com.project.game.main.HUD;
+import com.project.game.main.RendererHandler;
 
 import java.awt.*;
 
@@ -22,6 +22,16 @@ public class Projectile extends GameObject {
         }
     }
 
+    private GameObject PROJECTILE = null;
+    public void getProjectile() {
+        for (int i = 0; i < renderer.objects.size(); i++) {
+            if (renderer.objects.get(i).getId() == ID.Projectile) {
+                ENEMY = renderer.objects.get(i);
+                break;
+            }
+        }
+    }
+
     public Projectile(float x, float y, int health, ID id, RendererHandler renderer) {
         super(x, y, health, id);
         this.renderer = renderer;
@@ -32,13 +42,7 @@ public class Projectile extends GameObject {
         x += velocityX;
         y += velocityY;
 
-        if(y <= 0 || y >= Game.HEIGHT - 32) {
-            renderer.removeObject(this);
-        }
 
-        if(x <= 0 || x >= Game.WIDTH - 16) {
-            renderer.removeObject(this);
-        }
 
         collision();
     }
@@ -51,6 +55,12 @@ public class Projectile extends GameObject {
                 if (getBounds().intersects(temporaryObject.getBounds())) {
                     renderer.removeObject(temporaryObject);
                     hud.score += 100;
+                }
+            }
+
+            if (temporaryObject.getId() == ID.Coin || temporaryObject.getId() == ID.Crate || temporaryObject.getId() == ID.Block) {
+                if (getBounds().intersects(temporaryObject.getBounds())) {
+                    renderer.removeObject(this);
                 }
             }
         }
