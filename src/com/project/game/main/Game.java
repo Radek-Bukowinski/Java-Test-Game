@@ -215,7 +215,6 @@ public class Game extends Canvas implements Runnable{
                 if(red == 127 && green == 51 && blue == 0){
                     renderer.addObject(new Crate(xx * 32, yy * 32, 100, ID.Crate));
                 }
-
                 //Coin
                 if(red == 255 && green == 216 && blue == 0){
                     renderer.addObject(new Coin(xx * 32, yy * 32, 100, ID.Coin));

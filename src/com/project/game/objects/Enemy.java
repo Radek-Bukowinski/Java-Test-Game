@@ -64,6 +64,11 @@ public class Enemy extends GameObject {
     }
 
     @Override
+    public void setTexture() {
+
+    }
+
+    @Override
     public Rectangle getBounds() {
         return new Rectangle((int)x, (int)y, 16, 16);
     }

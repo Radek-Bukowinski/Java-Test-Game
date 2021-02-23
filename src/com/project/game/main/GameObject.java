@@ -3,6 +3,7 @@ package com.project.game.main;
 import com.project.game.identifiers.ID;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public abstract class GameObject {
 
@@ -10,11 +11,11 @@ public abstract class GameObject {
     protected float velocityX, velocityY;
     protected ID id;
     protected int health;
+    protected BufferedImage objectTexture;
 
     public Color getObjectColor() {
         return objectColor;
     }
-
     public void setObjectColor(Color objectColor) {
         this.objectColor = objectColor;
     }
@@ -30,6 +31,7 @@ public abstract class GameObject {
 
     public abstract void tick();
     public abstract void render(Graphics graphics);
+    public abstract void setTexture();
     public abstract Rectangle  getBounds();
 
     public float getX() { return x; }

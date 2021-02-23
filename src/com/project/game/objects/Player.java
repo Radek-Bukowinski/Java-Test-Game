@@ -7,17 +7,23 @@ import com.project.game.main.GameObject;
 import com.project.game.main.HUD;
 import com.project.game.main.RendererHandler;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
 
 public class Player extends GameObject {
     private RendererHandler renderer;
     private Random random = new Random();
     private Game game;
+    private BufferedImage objectTexture;
 
     public Player(int x, int y, int health, ID id, RendererHandler renderer) {
         super(x, y, health, id);
         this.renderer = renderer;
+        setTexture();
     }
 
     private GameObject PLAYER = null;
@@ -145,9 +151,19 @@ public class Player extends GameObject {
     }
 
     @Override
+    public void setTexture(){
+        try {
+            objectTexture = ImageIO.read(new File("res/player.png"));
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
+    }
+
+    @Override
     public void render(Graphics graphics) {
         graphics.setColor(Color.white);
-        graphics.fillRect((int)x, (int)y, 32, 32);
+        //graphics.fillRect((int)x, (int)y, 32, 32);
+        graphics.drawImage(objectTexture, (int) x, (int) y, null);
     }
 
     @Override
