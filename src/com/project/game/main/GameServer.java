@@ -27,6 +27,11 @@ public class GameServer {
      
     }
   }
+  
+  private class ServerSideConnection(){
+  
+  }
+  
   public static void main(String[] args){
     GameServer gameServer = new GameServer();
     gameServer.acceptConnection();
