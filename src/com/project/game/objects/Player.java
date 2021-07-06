@@ -13,12 +13,18 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
+import java.io.*;
+import java.net.*;
 
 public class Player extends GameObject {
     private RendererHandler renderer;
     private Random random = new Random();
     private Game game;
     private BufferedImage objectTexture;
+    
+    private ClientSideConnection clientSideConnection;
+    
+    //Player.connectToServer();
 
     public Player(int x, int y, int health, ID id, RendererHandler renderer) {
         super(x, y, health, id);
@@ -149,6 +155,27 @@ public class Player extends GameObject {
             Game.windowSTATE = STATE.Death;
         }
     }
+    
+    public void connectToServer(){
+        clientSideConnection = new ClientSideConnection();
+    }
+    
+    private class ClientSideConnection(){
+        private Socket socket;
+        private DataInputStream dataInputStream;
+        private DataOutputStream dataOutputStream;
+        
+        public ClientSideConnection(){
+            try{
+                socket = new Socket("localhost", 51734);
+                dataInputStream = new DataInputStream(socket.getInputStream());
+                dataOutputStream =new DataOutputStream(socket.getOutputStream());
+            } catch(IOException ioException){
+                ioException.printStackTrace();
+              }
+        }
+    }
+    
 
     @Override
     public void setTexture(){
