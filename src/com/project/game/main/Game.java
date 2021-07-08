@@ -2,6 +2,7 @@ package com.project.game.main;
 
 import com.project.game.identifiers.ID;
 import com.project.game.identifiers.STATE;
+import com.project.game.network.GameServer;
 import com.project.game.objects.Block;
 import com.project.game.objects.Coin;
 import com.project.game.objects.Crate;
@@ -19,6 +20,8 @@ public class Game extends Canvas implements Runnable{
     private Thread thread;
     private boolean running = false;
 
+    private GameServer gameServer;
+
     private Random random = new Random();
     private RendererHandler renderer;
     private Spawner spawner;
@@ -29,6 +32,7 @@ public class Game extends Canvas implements Runnable{
     private Camera camera;
 
     private BufferedImage level = null;
+    private BufferedImage background = null;
 
     static int frames = 0;
 
@@ -59,6 +63,7 @@ public class Game extends Canvas implements Runnable{
 
 
         new Window(WIDTH, HEIGHT, "Game", this);
+        loadBackground();
         loading = new Loading(this, renderer);
 
         hud = new HUD();
@@ -66,10 +71,20 @@ public class Game extends Canvas implements Runnable{
 
     }
 
+    public void initialiseMultiplayer(){
+        gameServer = new GameServer();
+        gameServer.acceptConnection();
+    }
+
     public void initialiseLevel(){
         BufferedImageLoader bufferedImageLoader = new BufferedImageLoader();
-        level = bufferedImageLoader.loadImage("/level_zero.png");
+        level = bufferedImageLoader.loadImage("/test.png");
         loadLevel(level);
+    }
+
+    public void loadBackground(){
+        BufferedImageLoader bufferedImageLoader = new BufferedImageLoader();
+        background = bufferedImageLoader.loadImage("/background.png");
     }
 
     public synchronized void start() {
@@ -95,7 +110,6 @@ public class Game extends Canvas implements Runnable{
         double ns = 1000000000 / amountOfTicks;
         double delta = 0;
         long timer = System.currentTimeMillis();
-
 
         while(running) {
             long now = System.nanoTime();
@@ -161,12 +175,15 @@ public class Game extends Canvas implements Runnable{
 
         graphics.setColor(Color.black);
         graphics.fillRect(0, 0, WIDTH, HEIGHT);
+        //graphics.drawImage(background, WIDTH, HEIGHT, null);
 
         graphics2D.translate(-camera.getX(), -camera.getY());
 
 
         graphics.setColor(Color.black);
         graphics.fillRect(0, 0, WIDTH, HEIGHT);
+        //graphics.drawImage(background, WIDTH, HEIGHT, null);
+
         if(!paused) {
             if (windowSTATE == STATE.Game) {
                 //hud.render(graphics);
@@ -219,6 +236,12 @@ public class Game extends Canvas implements Runnable{
                 if(red == 255 && green == 216 && blue == 0){
                     renderer.addObject(new Coin(xx * 32, yy * 32, 100, ID.Coin));
                 }
+                //Background
+                /*
+                if(red == 0){
+                    renderer.addObject(new Background(xx * 32, yy * 32, 100, ID.Background));
+                }
+                 */
             }
         }
     }

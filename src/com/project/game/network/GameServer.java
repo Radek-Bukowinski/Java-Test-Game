@@ -1,5 +1,8 @@
-import java.io.*;
-import java.net.*;
+package com.project.game.network;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 public class GameServer {
   private ServerSocket serverSocket;
@@ -9,10 +12,10 @@ public class GameServer {
     playerCount = 0;
     try{
       while(playerCount < 4){
-        serverSocket = new serverSocket(51734);
-      } catch(IOException ioException){
-        ioException.printStackTrace();
+        serverSocket = new ServerSocket(51734);
       }
+    } catch (IOException ioException) {
+      ioException.printStackTrace();
     }
   }
   
@@ -28,12 +31,7 @@ public class GameServer {
     }
   }
   
-  private class ServerSideConnection(){
+  private class ServerSideConnection {
   
-  }
-  
-  public static void main(String[] args){
-    GameServer gameServer = new GameServer();
-    gameServer.acceptConnection();
   }
 }

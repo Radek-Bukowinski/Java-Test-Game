@@ -1,21 +1,20 @@
 package com.project.game.objects;
 
 import com.project.game.identifiers.ID;
+import com.project.game.main.BufferedImageLoader;
 import com.project.game.main.GameObject;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 public class Block extends GameObject {
 
-    private BufferedImage objectTexture;
+    private BufferedImageLoader bufferedImageLoader = new BufferedImageLoader();
+    private BufferedImage bufferedImage;
 
     public Block(float x, float y, int health, ID id) {
         super(x, y, health, id);
-        setTexture();
+        bufferedImage = bufferedImageLoader.loadImage("/block.png");;
     }
 
     @Override
@@ -27,16 +26,7 @@ public class Block extends GameObject {
     public void render(Graphics graphics) {
         graphics.setColor(Color.lightGray);
         //graphics.fillRect((int) x, (int) y, 32, 32);
-        graphics.drawImage(objectTexture, (int) x, (int) y, null);
-    }
-
-    @Override
-    public void setTexture() {
-        try {
-            objectTexture = ImageIO.read(new File("res/block.png"));
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
-        }
+        graphics.drawImage(bufferedImage, (int) x, (int) y, null);
     }
 
     @Override

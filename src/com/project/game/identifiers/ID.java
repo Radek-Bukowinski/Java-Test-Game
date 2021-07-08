@@ -6,5 +6,6 @@ public enum ID {
     Projectile(),
     Block(),
     Crate(),
-    Coin();
+    Coin(),
+    Background();
 }

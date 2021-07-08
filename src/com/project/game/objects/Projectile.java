@@ -72,10 +72,6 @@ public class Projectile extends GameObject {
         graphics.fillRect((int)x, (int)y, 4, 4);
     }
 
-    @Override
-    public void setTexture() {
-
-    }
 
     @Override
     public Rectangle getBounds()

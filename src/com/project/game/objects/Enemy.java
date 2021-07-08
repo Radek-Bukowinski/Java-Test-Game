@@ -1,7 +1,6 @@
 package com.project.game.objects;
 
 import com.project.game.identifiers.ID;
-import com.project.game.main.Game;
 import com.project.game.main.GameObject;
 import com.project.game.main.RendererHandler;
 
@@ -12,6 +11,18 @@ public class Enemy extends GameObject {
 
 
     private GameObject PLAYER = null;
+
+    private float directionX;
+    private float directionY;
+
+
+
+    private float attractionX;
+    private float attractionY;
+
+    private float vectorX;
+    private float vectorY;
+
     public void getPlayer() {
         for (int i = 0; i < renderer.objects.size(); i++) {
             if (renderer.objects.get(i).getId() == ID.Player) {
@@ -31,24 +42,55 @@ public class Enemy extends GameObject {
         }
     }
 
-    public Enemy(int x, int y, int health, ID id, RendererHandler renderer) {
+    public Enemy(float x, float y, int health, ID id, RendererHandler renderer) {
         super(x, y, health, id);
         this.renderer = renderer;
-        velocityY = 5;
-        velocityX = 5;
+        velocityY = 1;
+        velocityX = 1;
     }
 
     @Override
     public void tick() {
-        x += velocityX;
-        y += velocityY;
+        x += vectorX;
+        y += vectorY;
 
+
+
+        if(PLAYER != null) {
+
+            float differenceX = (float) x - PLAYER.getX() - 16;
+            float differenceY = (float) y - PLAYER.getY() - 16;
+            float distance = (float) Math.sqrt((x - PLAYER.getX()) * (x - PLAYER.getX()) + (y - PLAYER.getY()) * (y - PLAYER.getY()));
+
+            attractionX =  ((-1 / distance) * differenceX);
+            attractionY =  ((-1 / distance) * differenceY);
+
+
+
+            //velocityX =  ((-1 / distance) * differenceX);
+            //velocityY =  ((-1 / distance) * differenceY);
+
+            directionX =  velocityX;
+            directionY =  velocityY;
+        } else{
+            getPlayer();
+        }
+
+       vectorX = (attractionX + directionX) / 2;
+       vectorY = (attractionY + directionY) / 2;
+
+        //x += velocityX;
+        //y += velocityY;
+
+        /*
         if(y <= 0 || y >= Game.HEIGHT - 32) {
             velocityY *= -1;
         }
         if(x <= 0 || x >= Game.WIDTH - 16) {
             velocityX *= -1;
         }
+
+         */
 
     }
 
@@ -63,10 +105,6 @@ public class Enemy extends GameObject {
 
     }
 
-    @Override
-    public void setTexture() {
-
-    }
 
     @Override
     public Rectangle getBounds() {

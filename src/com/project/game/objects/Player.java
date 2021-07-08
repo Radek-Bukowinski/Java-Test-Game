@@ -2,25 +2,22 @@ package com.project.game.objects;
 
 import com.project.game.identifiers.ID;
 import com.project.game.identifiers.STATE;
-import com.project.game.main.Game;
-import com.project.game.main.GameObject;
-import com.project.game.main.HUD;
-import com.project.game.main.RendererHandler;
+import com.project.game.main.*;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.Socket;
 import java.util.Random;
-import java.io.*;
-import java.net.*;
 
 public class Player extends GameObject {
     private RendererHandler renderer;
     private Random random = new Random();
     private Game game;
-    private BufferedImage objectTexture;
+    private BufferedImageLoader bufferedImageLoader = new BufferedImageLoader();
+    private BufferedImage bufferedImage;
     
     private ClientSideConnection clientSideConnection;
     
@@ -29,7 +26,7 @@ public class Player extends GameObject {
     public Player(int x, int y, int health, ID id, RendererHandler renderer) {
         super(x, y, health, id);
         this.renderer = renderer;
-        setTexture();
+        bufferedImage = bufferedImageLoader.loadImage("/player.png");
     }
 
     private GameObject PLAYER = null;
@@ -160,7 +157,7 @@ public class Player extends GameObject {
         clientSideConnection = new ClientSideConnection();
     }
     
-    private class ClientSideConnection(){
+    private class ClientSideConnection{
         private Socket socket;
         private DataInputStream dataInputStream;
         private DataOutputStream dataOutputStream;
@@ -177,20 +174,12 @@ public class Player extends GameObject {
     }
     
 
-    @Override
-    public void setTexture(){
-        try {
-            objectTexture = ImageIO.read(new File("res/player.png"));
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
-        }
-    }
 
     @Override
     public void render(Graphics graphics) {
         graphics.setColor(Color.white);
         //graphics.fillRect((int)x, (int)y, 32, 32);
-        graphics.drawImage(objectTexture, (int) x, (int) y, null);
+        graphics.drawImage(bufferedImage, (int) x, (int) y, null);
     }
 
     @Override
