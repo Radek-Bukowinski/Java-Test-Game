@@ -16,6 +16,8 @@ public class Game extends Canvas implements Runnable{
     public static final int WIDTH = 1280, HEIGHT = WIDTH / 16 * 9;
 
     public static STATE windowSTATE = STATE.Menu;
+    
+    public static MODE gameMODE = MODE.Other;
 
     private Thread thread;
     private boolean running = false;
