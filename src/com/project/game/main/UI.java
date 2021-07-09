@@ -90,6 +90,16 @@ public class UI extends MouseAdapter {
                 findPlayer();
             }
         }
+            
+        if(game.windowSTATE == STATE.Menu) {
+            if (mouseOver(realMouseX, realMouseY, 540, 315, 200, 40)) {
+                game.gameMODE = MODE.Singleplayer;
+                }
+            }
+            if (mouseOver(realMouseX, realMouseY, 540, 375, 200, 40)) {
+                game.gameMODE = MODE.Multiplayer;
+            }
+        }
 
         if(game.windowSTATE == STATE.Menu) {
             if (mouseOver(realMouseX, realMouseY, 540, 315, 200, 40)) {
@@ -140,6 +150,23 @@ public class UI extends MouseAdapter {
         super.mouseMoved(event);
         int mouseX = event.getX();
         int mouseY = event.getY();
+            
+        if(game.windowSTATE == STATE.ModeSelect){
+                //Singleplayer Button
+                if (mouseOver(mouseX, mouseY, 540, 315, 200, 40)) {
+                        startButtonColor = Color.darkGray;
+                }else{
+                        startButtonColor = Color.white;
+                }
+        
+
+            //Multiplayer Button
+            if (mouseOver(mouseX, mouseY, 540, 375, 200, 40)) {
+                infoButtonColor = Color.darkGray;
+            }else{
+                infoButtonColor = Color.white;
+            }
+        }
 
         if(game.windowSTATE == STATE.Menu){
 
@@ -196,6 +223,17 @@ public class UI extends MouseAdapter {
     public void tick() { }
 
     public void render(Graphics graphics) {
+        if(game.windowSTATE == STATE.ModeSelect){
+            graphics.setColor(startButtonColor);
+            graphics.drawRect(640 - 100, 340 - 25, 200, 40);
+            graphics.drawString("Singleplayer", 617, 342);
+
+            graphics.setColor(infoButtonColor);
+            graphics.drawRect(640 - 100, 400 - 25, 200, 40);
+            graphics.drawString("Multiplayer", 618, 402);
+
+        }    
+        
         if(game.windowSTATE == STATE.Menu) {
             graphics.setColor(Color.white);
 
