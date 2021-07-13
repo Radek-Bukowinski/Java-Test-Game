@@ -88,6 +88,18 @@ public class Game extends Canvas implements Runnable{
         BufferedImageLoader bufferedImageLoader = new BufferedImageLoader();
         background = bufferedImageLoader.loadImage("/background.png");
     }
+    
+    public void renderDistance(){
+        GameObject checkObject = new GameObject();
+        for(i = 0; i > objects.length; i++){
+            if (renderer.objects.get(i).getId() == ID.Enemy || renderer.objects.get(i).getId() == ID.Projectile){
+                checkObject = renderer.objects.get(i);
+                if(checkObject.getX() > camera.getX() || checkObject.getY() > camera.getY()){
+                    renderer.removeObject(checkObject)
+                }
+            }
+        }
+    }
 
     public synchronized void start() {
         thread = new Thread(this);
