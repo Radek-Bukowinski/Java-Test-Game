@@ -28,46 +28,30 @@ public class Loading {
 
     public void tick()
     {
-        progressLevel = Game.constrain(progressLevel, 0, 1280);
+        progressLevel = Game.constrain(progressLevel, 80, 1200);
         ticks++;
-        progressLevel += 10;
-
-
-        if(progressLevel ==  100) {
-            loadingString = "Loading.";
-        }
-        if(progressLevel ==  200) {
-            loadingString = "Loading..";
-        }
-        if(progressLevel ==  300) {
-            loadingString = "Loading...";
-        }
-        if(progressLevel ==  400) {
-            loadingString = "Loading";
-        }
-        if(progressLevel ==  500) {
-            loadingString = "Loading.";
-        }
-        if(progressLevel ==  600) {
-            loadingString = "Loading..";
-        }
-        if(progressLevel ==  700) {
-            loadingString = "Loading...";
-        }
-        if(progressLevel ==  800) {
-            loadingString = "Loading";
-        }
-        if(progressLevel ==  900) {
-            loadingString = "Loading.";
-        }
-        if(progressLevel ==  1000) {
-            loadingString = "Loading..";
-        }
-        if(progressLevel ==  1100) {
-            loadingString = "Loading...";
+        progressLevel += 20;
+        
+        if(progressLevel % 100) {
+            if(Math.floor(progressLevel / 100) == 0){
+                loadingString = "Loading";
+            }
+            if(Math.floor(progressLevel / 100) == 1){
+                loadingString = "Loading.";
+            }
+                
+            if(Math.floor(progressLevel / 100) == 2){
+                loadingString = "Loading..";
+            }
+                
+            if(Math.floor(progressLevel / 100) == 3){
+                loadingString = "Loading...";
+            }
+                
+                
         }
 
-        if(progressLevel == 1280) {
+        if(progressLevel == 1200) {
             game.windowSTATE = STATE.Game;
             game.initialiseLevel();
             renderer.addObject(new Player(Game.WIDTH / 2 - 32, Game.HEIGHT / 2 - 32, 100, ID.Player, renderer));
@@ -85,12 +69,12 @@ public class Loading {
         graphics.drawString(loadingString, 570, 300);
 
         graphics.setColor(Color.gray);
-        graphics.fillRect(0, 660, 1280, 20);
+        graphics.fillRect(80, 660, 1200, 20);
 
         graphics.setColor(Color.white);
-        graphics.drawRect(0, 660, 1280, 20);
+        graphics.drawRect(80, 660, 1200, 20);
 
         graphics.setColor(Color.white);
-        graphics.fillRect(0, 660, progressLevel, 20);
+        graphics.fillRect(80, 660, progressLevel, 20);
     }
 }
