@@ -19,6 +19,8 @@ public class Loading {
     private Random random = new Random();
 
     private String loadingString = "Loading";
+    
+    private Color white = Color.white;
 
     public Loading(Game game, RendererHandler renderer)
     {
@@ -62,7 +64,7 @@ public class Loading {
 
     public void render(Graphics graphics)
     {
-        graphics.setColor(Color.white);
+        graphics.setColor(white);
 
         Font font = new Font("Arial", 1, 30);
         graphics.setFont(font);
@@ -71,10 +73,8 @@ public class Loading {
         graphics.setColor(Color.gray);
         graphics.fillRect(80, 660, 1200, 20);
 
-        graphics.setColor(Color.white);
+        graphics.setColor(white);
         graphics.drawRect(80, 660, 1200, 20);
-
-        graphics.setColor(Color.white);
         graphics.fillRect(80, 660, progressLevel, 20);
     }
 }
