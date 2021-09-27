@@ -94,8 +94,8 @@ public class Game extends Canvas implements Runnable{
         for(i = 0; i > objects.length; i++){
             if (renderer.objects.get(i).getId() == ID.Enemy || renderer.objects.get(i).getId() == ID.Projectile){
                 checkObject = renderer.objects.get(i);
-                if(checkObject.getX() > camera.getX() || checkObject.getY() > camera.getY()){
-                    renderer.removeObject(checkObject)
+                if((checkObject.getX() > camera.getX() + 640) || (checkObject.getY() > camera.getY() + 360) || (checkObject.getX() > camera.getX() - 640) || (checkObject.getY() > camera.getY() - 360)){
+                    checkObject.isRendered = false;
                 }
             }
         }
