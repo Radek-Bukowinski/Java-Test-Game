@@ -10,6 +10,7 @@ public abstract class GameObject {
     protected float velocityX, velocityY;
     protected ID id;
     protected int health;
+    protected boolean isRendered;
 
     public Color getObjectColor() {
         return objectColor;
