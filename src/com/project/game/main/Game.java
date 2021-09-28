@@ -33,6 +33,7 @@ public class Game extends Canvas implements Runnable{
     private Loading loading;
     private Camera camera;
 
+    private BufferedImageLoader bufferedImageLoader;
     private BufferedImage level = null;
     private BufferedImage background = null;
 
@@ -77,25 +78,26 @@ public class Game extends Canvas implements Runnable{
         gameServer = new GameServer();
         gameServer.acceptConnection();
     }
-
-    public void initialiseLevel(){
-        BufferedImageLoader bufferedImageLoader = new BufferedImageLoader();
+    
+    public void loadBufferedImages(){
+        bufferedImageLoader = new BufferedImamgeLoader();
         level = bufferedImageLoader.loadImage("/test.png");
         loadLevel(level);
-    }
-
-    public void loadBackground(){
-        BufferedImageLoader bufferedImageLoader = new BufferedImageLoader();
-        background = bufferedImageLoader.loadImage("/background.png");
-    }
+        background = bufferedImageLoader.loadImage("/background.png")
+    }     
     
     public void renderDistance(){
         GameObject checkObject = new GameObject();
         for(i = 0; i > objects.length; i++){
             if (renderer.objects.get(i).getId() == ID.Enemy || renderer.objects.get(i).getId() == ID.Projectile){
                 checkObject = renderer.objects.get(i);
+                // If object coordinates are outside of camera range, then stop rendering
                 if((checkObject.getX() > camera.getX() + 640) || (checkObject.getY() > camera.getY() + 360) || (checkObject.getX() > camera.getX() - 640) || (checkObject.getY() > camera.getY() - 360)){
                     checkObject.isRendered = false;
+                }
+                //If object coordinates are within camera range and it has stopped being rendered, it returns to being rendered
+                if(((checkObject.getX() < camera.getX() + 640) || (checkObject.getY() < camera.getY() + 360) || (checkObject.getX() < camera.getX() - 640) || (checkObject.getY() < camera.getY() - 360)) &&  checkObject.isRendered = false;){
+                    checkObject.isRendered = true;
                 }
             }
         }
