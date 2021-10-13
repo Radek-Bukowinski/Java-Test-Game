@@ -1,6 +1,7 @@
 package com.project.game.main;
 
 import com.project.game.identifiers.ID;
+import com.project.game.identifiers.MODE;
 import com.project.game.identifiers.STATE;
 import com.project.game.network.GameServer;
 import com.project.game.objects.Block;
@@ -16,8 +17,8 @@ public class Game extends Canvas implements Runnable{
     public static final int WIDTH = 1280, HEIGHT = WIDTH / 16 * 9;
 
     public static STATE windowSTATE = STATE.Menu;
-    
     public static MODE gameMODE = MODE.Other;
+
 
     private Thread thread;
     private boolean running = false;
@@ -88,18 +89,20 @@ public class Game extends Canvas implements Runnable{
         BufferedImageLoader bufferedImageLoader = new BufferedImageLoader();
         background = bufferedImageLoader.loadImage("/background.png");
     }
-    
+
+    /*
     public void renderDistance(){
         GameObject checkObject = new GameObject();
         for(i = 0; i > objects.length; i++){
             if (renderer.objects.get(i).getId() == ID.Enemy || renderer.objects.get(i).getId() == ID.Projectile){
                 checkObject = renderer.objects.get(i);
                 if(checkObject.getX() > camera.getX() || checkObject.getY() > camera.getY()){
-                    renderer.removeObject(checkObject)
+                    renderer.removeObject(checkObject);
                 }
             }
         }
     }
+    */
 
     public synchronized void start() {
         thread = new Thread(this);

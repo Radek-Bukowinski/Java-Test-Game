@@ -1,7 +1,7 @@
 /*
 TODO:
         Implement Upgrades System
-        Highlight feature to UI
+        Highlight feature to UI - done
         Random movement of enemy
         Spawning in of health/score
 */
@@ -10,6 +10,7 @@ TODO:
 package com.project.game.main;
 
 import com.project.game.identifiers.ID;
+import com.project.game.identifiers.MODE;
 import com.project.game.identifiers.STATE;
 import com.project.game.objects.Enemy;
 import com.project.game.objects.Player;
@@ -56,10 +57,11 @@ public class UI extends MouseAdapter {
         }
     }
 
+    /*
+        Below: Function for shooting mechanic
+    */
     ScheduledFuture<?> shootHandle;
-
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-
     private void shootProjectile(int mouseX, int mouseY){
         GameObject temporaryProjectile = renderer.addObject(new Projectile(temporaryObject.x + 16, temporaryObject.y + 16, 100, ID.Projectile, renderer));
         float angle = (float) Math.atan2(mouseY - temporaryObject.y, mouseX - temporaryObject.x);
@@ -69,6 +71,9 @@ public class UI extends MouseAdapter {
 
 
     }
+    /*
+        End of shooting mechanic
+    */
 
     @Override
     public void mousePressed(MouseEvent event) {
@@ -90,24 +95,26 @@ public class UI extends MouseAdapter {
                 findPlayer();
             }
         }
-            
-        if(game.windowSTATE == STATE.Menu) {
+
+
+        if(game.windowSTATE == STATE.ModeSelect) {
+            //singleplayer button
             if (mouseOver(realMouseX, realMouseY, 540, 315, 200, 40)) {
                 game.gameMODE = MODE.Singleplayer;
-                }
+                game.windowSTATE = STATE.Loading;
             }
+
+            //multiplayer button
             if (mouseOver(realMouseX, realMouseY, 540, 375, 200, 40)) {
                 game.gameMODE = MODE.Multiplayer;
             }
         }
 
+
         if(game.windowSTATE == STATE.Menu) {
+            //start button
             if (mouseOver(realMouseX, realMouseY, 540, 315, 200, 40)) {
-                game.windowSTATE = STATE.Loading;
-                for(int i = 0; i < renderer.objects.size(); i++) {
-                    GameObject temporaryObject = renderer.objects.get(i);
-                    renderer.removeObject(temporaryObject);
-                }
+               game.windowSTATE = STATE.ModeSelect;
             }
             if (mouseOver(realMouseX, realMouseY, 540, 375, 200, 40)) {
                 game.windowSTATE = STATE.Info;
@@ -223,22 +230,13 @@ public class UI extends MouseAdapter {
     public void tick() { }
 
     public void render(Graphics graphics) {
-        if(game.windowSTATE == STATE.ModeSelect){
-            graphics.setColor(startButtonColor);
-            graphics.drawRect(640 - 100, 340 - 25, 200, 40);
-            graphics.drawString("Singleplayer", 617, 342);
 
-            graphics.setColor(infoButtonColor);
-            graphics.drawRect(640 - 100, 400 - 25, 200, 40);
-            graphics.drawString("Multiplayer", 618, 402);
-
-        }    
         
         if(game.windowSTATE == STATE.Menu) {
             graphics.setColor(Color.white);
 
             graphics.setFont(largeFont);
-            graphics.drawString("Survival Game", 500, 100);
+            graphics.drawString("Game", 580, 100);
 
             graphics.setFont(font);
             graphics.drawString("By: Radek", 590, 130);
@@ -258,6 +256,17 @@ public class UI extends MouseAdapter {
             graphics.setColor(Color.white);
             graphics.drawString("Version: Alpha 0.0.5", 540, 680);
 
+
+        }
+
+        else if(game.windowSTATE == STATE.ModeSelect){
+            graphics.setColor(Color.white);
+            graphics.drawRect(640 - 100, 340 - 25, 200, 40);
+            graphics.drawString("Singleplayer", 617, 342);
+
+            graphics.setColor(Color.white);
+            graphics.drawRect(640 - 100, 400 - 25, 200, 40);
+            graphics.drawString("Multiplayer", 618, 402);
 
         }
 

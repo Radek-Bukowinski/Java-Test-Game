@@ -9,5 +9,8 @@ public enum STATE {
     Game(),
     Loading(),
     Upgrades(),
-    Death();
+    Death(),
+    MultiplayerSelect(),
+    MultiplayerHost(),
+    MultiplayerJoin();
 }
