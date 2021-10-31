@@ -5,7 +5,7 @@ import java.util.LinkedList;
 
 public class RendererHandler {
     public LinkedList<GameObject> objects = new LinkedList<GameObject>();
-    public LinkedList<GameObject> outOfRender = new LinkedList<GameObject>();
+    //public LinkedList<GameObject> outOfRender = new LinkedList<GameObject>();
     public void tick() {
         for(int i = 0; i < objects.size(); i++) {
             GameObject temporaryObject = objects.get(i);
@@ -17,6 +17,8 @@ public class RendererHandler {
     public void render(Graphics graphics) {
         for(int i = 0; i < objects.size(); i++) {
             GameObject temporaryObject = objects.get(i);
+            temporaryObject.render(graphics);
+            /*
             if(temporaryObject.isRendered == false){
                 GameObject holder = temporaryObject;
                 outOfRender.add(holder);  
@@ -24,6 +26,7 @@ public class RendererHandler {
             } else{
                   temporaryObject.render(graphics);
             }
+            */
         }
     }
 

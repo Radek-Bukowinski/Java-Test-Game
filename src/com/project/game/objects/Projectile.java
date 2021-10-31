@@ -12,6 +12,16 @@ public class Projectile extends GameObject {
     private RendererHandler renderer;
     private HUD hud;
 
+    private GameObject PLAYER = null;
+    public void getPlayer() {
+        for (int i = 0; i < renderer.objects.size(); i++) {
+            if (renderer.objects.get(i).getId() == ID.Player) {
+                PLAYER = renderer.objects.get(i);
+                break;
+            }
+        }
+    }
+
     private GameObject ENEMY = null;
     public void getEnemy() {
         for (int i = 0; i < renderer.objects.size(); i++) {
@@ -32,6 +42,8 @@ public class Projectile extends GameObject {
         }
     }
 
+
+
     public Projectile(float x, float y, int health, ID id, RendererHandler renderer) {
         super(x, y, health, id);
         this.renderer = renderer;
@@ -39,9 +51,18 @@ public class Projectile extends GameObject {
 
     @Override
     public void tick() {
+        /*
+        if(PLAYER != null) {
+            x += (velocityX + PLAYER.getVelocityX());
+            y += (velocityY + PLAYER.getVelocityY());
+        }else{
+            getPlayer();
+        }
+
+         */
+
         x += velocityX;
         y += velocityY;
-
 
 
         collision();

@@ -1,7 +1,6 @@
 package com.project.game.identifiers;
 
 public enum STATE {
-    ModeSelect(),
     //change menu to options
     Menu(),
     Info(),
@@ -10,6 +9,7 @@ public enum STATE {
     Loading(),
     Upgrades(),
     Death(),
+    ModeSelect(),
     MultiplayerSelect(),
     MultiplayerHost(),
     MultiplayerJoin();

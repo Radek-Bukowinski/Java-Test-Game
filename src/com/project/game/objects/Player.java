@@ -112,18 +112,19 @@ public class Player extends GameObject {
                 getPlayer();
             }
 
-            /*
+
             if (PLAYER != null) {
 
                 if (ENEMY != null) {
                     if (PLAYER.getBounds().intersects(ENEMY.getBounds())) {
                         PLAYER.setHealth(PLAYER.getHealth() - 2);
                     }
-                }else{
+                } else {
                     getEnemy();
                 }
+            }
 
-             */
+
 
 
         }
