@@ -260,6 +260,11 @@ public class UI extends MouseAdapter {
         }
 
         else if(game.windowSTATE == STATE.ModeSelect){
+                
+                /*
+                removeAll();
+        repaint(); 
+                */
             graphics.setColor(Color.white);
             graphics.drawRect(640 - 100, 340 - 25, 200, 40);
             graphics.drawString("Singleplayer", 617, 342);
