@@ -1,7 +1,6 @@
 package com.project.game.main;
 
 import com.project.game.identifiers.ID;
-import com.project.game.identifiers.MODE;
 import com.project.game.identifiers.STATE;
 import com.project.game.network.GameServer;
 import com.project.game.objects.Block;
@@ -17,8 +16,10 @@ public class Game extends Canvas implements Runnable{
     public static final int WIDTH = 1280, HEIGHT = WIDTH / 16 * 9;
 
     public static STATE windowSTATE = STATE.Menu;
-    public static MODE gameMODE = MODE.Other;
+    //public static MODE gameMODE = MODE.Other;
 
+    private STATE currentSTATE;
+    private STATE lastSTATE = currentSTATE;
 
     private Thread thread;
     private boolean running = false;
@@ -44,14 +45,6 @@ public class Game extends Canvas implements Runnable{
 
     public boolean DEBUG = false;
 
-
-    public static int getFrames() {
-        ticks++;
-        if(ticks > 1000) {
-            return frames;
-        }
-        return 1000;
-    }
 
     public Game() {
         renderer = new RendererHandler();
@@ -90,6 +83,36 @@ public class Game extends Canvas implements Runnable{
         background = bufferedImageLoader.loadImage("/background.png");
     }
 
+    public static int getRandomNumber(int min, int max) {
+        Random random = new Random();
+        return random.ints(min, max)
+                .findFirst()
+                .getAsInt();
+    }
+
+    /*
+    public void callPlayer(){
+        if (windowSTATE == STATE.Game && PLAYER != null){
+
+        }else{
+            getPlayer();
+        }
+    }
+
+     */
+    /*
+    public static GameObject PLAYER = null;
+    public void getPlayer() {
+        for (int i = 0; i < renderer.objects.size(); i++) {
+            if (renderer.objects.get(i).getId() == ID.Player) {
+                PLAYER = renderer.objects.get(i);
+                break;
+            }
+        }
+    }
+
+     */
+
     /*
     public void renderDistance(){
         GameObject checkObject = new GameObject();
@@ -121,36 +144,64 @@ public class Game extends Canvas implements Runnable{
 
     public void run() {
         this.requestFocus();
-
         long lastTime = System.nanoTime();
+        /*
+            Here we set the amount of ticks, or the amount of times the game updates every second.
+            This value is set to 100, ensuring smooth gameplay.
+            By design of the game loop logic, the amount of ticks (updates), is also equal to the fps.
+            We could have a seperate while loop to have fps be unbound from the tickrate, but this is overcomplicated.
+        */
         double amountOfTicks = 60.0;
         double ns = 1000000000 / amountOfTicks;
-        double delta = 0;
+        double accumulatedFrameTime = 0;
         long timer = System.currentTimeMillis();
+        //int frames = 0;
+        int ticks = 0;
 
-        while(running) {
-            long now = System.nanoTime();
-            delta += (now - lastTime) / ns;
-            lastTime = now;
+        //long renderLastTime=System.nanoTime();
+        //double fps = 120.0; //MAX FPS
+        //double renderNs=1000000000/fps;
+        //double renderDelta = 0;
 
-            while(delta >=1) {
+        while(running){
+            long timeNow = System.nanoTime();
+            accumulatedFrameTime += (timeNow - lastTime) / ns; // The amount of time passed since last time we checked, divided by ns
+            lastTime = timeNow;
+            while(accumulatedFrameTime >= 1){
                 tick();
-                delta--;
-            }
-
-            if(running) {
+                ticks++;
                 render();
+                //frames++;
+                //System.out.println(accumulatedFrameTime);
+                accumulatedFrameTime--;
             }
 
-            frames++;
+            /*
+            now = System.nanoTime();
+            renderDelta += (now - renderLastTime) / renderNs;
+            renderLastTime = now;
+            while(running && renderDelta >= 1){
+                render();
+                frames++;
+                renderDelta--;
+            }
 
-            if(System.currentTimeMillis() - timer > 1000) {
+             */
+
+            currentSTATE = windowSTATE;
+            if(currentSTATE != lastSTATE) {
+                System.out.println("STATE changed to " + currentSTATE);
+                lastSTATE = currentSTATE;
+            }
+
+            if(System.currentTimeMillis() - timer > 1000){
                 timer += 1000;
-                //System.out.println("FPS: "+ frames);
-                frames = 0;
+                //System.out.println("FPS: " + frames);
+                //System.out.println("Ticks per second: " + ticks);
+                //frames = 0;
+                ticks = 0;
             }
         }
-
         stop();
     }
 
@@ -166,9 +217,8 @@ public class Game extends Canvas implements Runnable{
                     }
                 }
 
-
             }
-            if (windowSTATE == STATE.Menu || windowSTATE == STATE.Info) {
+            if (windowSTATE == STATE.Menu || windowSTATE == STATE.Info || windowSTATE == STATE.ModeSelect|| windowSTATE == STATE.MultiplayerSelect) {
                 ui.tick();
                 renderer.tick();
             }
@@ -206,7 +256,7 @@ public class Game extends Canvas implements Runnable{
                 //hud.render(graphics);
             }
 
-            if (windowSTATE == STATE.Menu || windowSTATE == STATE.Death || windowSTATE == STATE.Info) {
+            if (windowSTATE == STATE.Menu || windowSTATE == STATE.Death || windowSTATE == STATE.Info || windowSTATE == STATE.ModeSelect || windowSTATE == STATE.MultiplayerSelect) {
                 ui.render(graphics);
             }
 
