@@ -6,11 +6,9 @@ TODO:
         Spawning in of health/score
 */
 
-
 package com.project.game.main;
 
 import com.project.game.identifiers.ID;
-import com.project.game.identifiers.MODE;
 import com.project.game.identifiers.STATE;
 import com.project.game.objects.Enemy;
 import com.project.game.objects.Player;
@@ -24,6 +22,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+
+import static com.project.game.identifiers.STATE.MultiplayerSelect;
 
 public class UI extends MouseAdapter {
     private Game game;
@@ -57,6 +57,16 @@ public class UI extends MouseAdapter {
         }
     }
 
+    private void resetButtonColors(){
+        startButtonColor = Color.white;
+        infoButtonColor = Color.white;
+        exitButtonColor = Color.white;
+        backButtonColor = Color.white;
+    }
+
+    ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+
+
     /*
         Below: Function for shooting mechanic
     */
@@ -76,7 +86,7 @@ public class UI extends MouseAdapter {
     */
 
     @Override
-    public void mousePressed(MouseEvent event) {
+    public void mousePressed(MouseEvent event){
         super.mousePressed(event);
         int mouseX = (int) (event.getX() + camera.getX());
         int mouseY = (int) (event.getY() + camera.getY());
@@ -96,22 +106,56 @@ public class UI extends MouseAdapter {
             }
         }
 
-
         if(game.windowSTATE == STATE.ModeSelect) {
+            resetButtonColors();
             //singleplayer button
-            if (mouseOver(realMouseX, realMouseY, 540, 315, 200, 40)) {
-                game.gameMODE = MODE.Singleplayer;
+            if (mouseOver(realMouseX, realMouseY, 340, 325, 200, 40)) {
+                //game.gameMODE = MODE.Singleplayer;
                 game.windowSTATE = STATE.Loading;
             }
 
             //multiplayer button
-            if (mouseOver(realMouseX, realMouseY, 540, 375, 200, 40)) {
-                game.gameMODE = MODE.Multiplayer;
+            if (mouseOver(realMouseX, realMouseY, 740, 325, 200, 40)) {
+                Runnable callUpdateState = () -> updateState(STATE.MultiplayerSelect);
+                //executorService.scheduleWithFixedDelay(callUpdateState, 0, 1, TimeUnit.MILLISECONDS);
+                executorService.schedule(callUpdateState, 1, TimeUnit.MILLISECONDS);
+                //game.gameMODE = MODE.Multiplayer;
+                //game.windowSTATE = MultiplayerSelect;
+
+                /*
+                try {
+                    Thread.currentThread().wait(1);
+                } catch (InterruptedException interruptedException) {
+                    interruptedException.printStackTrace();
+                }
+                */
+            }
+            //back button
+            if(mouseOver(realMouseX, realMouseY, 540, 625, 200, 40)) {
+                game.windowSTATE = STATE.Menu;
+            }
+        }
+
+        if(game.windowSTATE == MultiplayerSelect) {
+            resetButtonColors();
+            //host button
+            if (mouseOver(realMouseX, realMouseY, 340, 325, 200, 40)) {
+                game.windowSTATE = STATE.MultiplayerHost;
+            }
+
+            //join button
+            if (mouseOver(realMouseX, realMouseY, 740, 325, 200, 40)) {
+                game.windowSTATE = STATE.MultiplayerJoin;
+            }
+            //back button
+            if(mouseOver(realMouseX, realMouseY, 540, 625, 200, 40)) {
+                game.windowSTATE = STATE.ModeSelect;
             }
         }
 
 
         if(game.windowSTATE == STATE.Menu) {
+            resetButtonColors();
             //start button
             if (mouseOver(realMouseX, realMouseY, 540, 315, 200, 40)) {
                game.windowSTATE = STATE.ModeSelect;
@@ -126,6 +170,7 @@ public class UI extends MouseAdapter {
         }
 
         if(game.windowSTATE == STATE.Info) {
+            resetButtonColors();
             if(mouseOver(realMouseX, realMouseY, 540, 625, 200, 40)) {
                 game.windowSTATE = STATE.Menu;
             }
@@ -152,6 +197,12 @@ public class UI extends MouseAdapter {
         }
     }
 
+
+    private static STATE updateState(STATE state) {
+        Game.windowSTATE = state;
+        return state;
+    }
+
     @Override
     public void mouseMoved(MouseEvent event){
         super.mouseMoved(event);
@@ -159,19 +210,51 @@ public class UI extends MouseAdapter {
         int mouseY = event.getY();
             
         if(game.windowSTATE == STATE.ModeSelect){
-                //Singleplayer Button
-                if (mouseOver(mouseX, mouseY, 540, 315, 200, 40)) {
-                        startButtonColor = Color.darkGray;
-                }else{
-                        startButtonColor = Color.white;
-                }
+
+            //Singleplayer Button
+            if (mouseOver(mouseX, mouseY, 340, 325, 200, 40)) {
+                startButtonColor = Color.darkGray;
+            }else{
+                startButtonColor = Color.white;
+            }
         
 
             //Multiplayer Button
-            if (mouseOver(mouseX, mouseY, 540, 375, 200, 40)) {
+            if (mouseOver(mouseX, mouseY, 740, 325, 200, 40)) {
                 infoButtonColor = Color.darkGray;
             }else{
                 infoButtonColor = Color.white;
+            }
+
+            //Back Button
+            if(mouseOver(mouseX, mouseY, 540, 625, 200, 40)) {
+                backButtonColor = Color.darkGray;
+            }else{
+                backButtonColor = Color.white;
+            }
+        }
+
+        if(game.windowSTATE == MultiplayerSelect){
+            //Join Button
+            if (mouseOver(mouseX, mouseY, 340, 325, 200, 40)) {
+                startButtonColor = Color.darkGray;
+            }else{
+                startButtonColor = Color.white;
+            }
+
+
+            //Host Button
+            if (mouseOver(mouseX, mouseY, 740, 325, 200, 40)) {
+                infoButtonColor = Color.darkGray;
+            }else{
+                infoButtonColor = Color.white;
+            }
+
+            //Back Button
+            if(mouseOver(mouseX, mouseY, 540, 625, 200, 40)) {
+                backButtonColor = Color.darkGray;
+            }else{
+                backButtonColor = Color.white;
             }
         }
 
@@ -265,14 +348,33 @@ public class UI extends MouseAdapter {
                 removeAll();
         repaint(); 
                 */
-            graphics.setColor(Color.white);
-            graphics.drawRect(640 - 100, 340 - 25, 200, 40);
-            graphics.drawString("Singleplayer", 617, 342);
+            graphics.setFont(font);
+            graphics.setColor(startButtonColor);
+            graphics.drawRect(340, 325, 200, 40);
+            graphics.drawString("Singleplayer", 380, 350);
 
-            graphics.setColor(Color.white);
-            graphics.drawRect(640 - 100, 400 - 25, 200, 40);
-            graphics.drawString("Multiplayer", 618, 402);
+            graphics.setColor(infoButtonColor);
+            graphics.drawRect(740, 325, 200, 40);
+            graphics.drawString("Multiplayer", 790, 350);
 
+            graphics.setColor(backButtonColor);
+            graphics.drawRect(640 - 100, 650 - 25, 200, 40);
+            graphics.drawString("Back", 617, 651);
+        }
+
+        else if(game.windowSTATE == MultiplayerSelect){
+            graphics.setFont(font);
+            graphics.setColor(startButtonColor);
+            graphics.drawRect(340, 325, 200, 40);
+            graphics.drawString("Host", 380, 350);
+
+            graphics.setColor(infoButtonColor);
+            graphics.drawRect(740, 325, 200, 40);
+            graphics.drawString("Join", 790, 350);
+
+            graphics.setColor(backButtonColor);
+            graphics.drawRect(640 - 100, 650 - 25, 200, 40);
+            graphics.drawString("Back", 617, 651);
         }
 
         else if (game.windowSTATE == STATE.Info) {
