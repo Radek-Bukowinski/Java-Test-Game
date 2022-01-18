@@ -19,7 +19,6 @@ public class Coin extends GameObject {
 
     @Override
     public void tick() {
-
     }
 
     @Override
@@ -28,6 +27,8 @@ public class Coin extends GameObject {
         //graphics.fillRect((int) x, (int) y, 32, 32);
         graphics.drawImage(bufferedImage, (int) x, (int) y, null);
     }
+
+
 
     @Override
     public Rectangle getBounds() {

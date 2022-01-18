@@ -10,16 +10,11 @@ import java.util.Random;
 
 public class Loading {
     private int progressLevel = 0;
-
     private Game game;
     private RendererHandler renderer;
-
     private int ticks;
-
     private Random random = new Random();
-
     private String loadingString = "Loading";
-    
     private Color white = Color.white;
 
     public Loading(Game game, RendererHandler renderer)
@@ -46,10 +41,9 @@ public class Loading {
                 loadingString = "Loading..";
             }
                 
-            if(Math.floor(progressLevel / 100) == 3){
+            if(Math.floor(progressLevel / 100) == 3) {
                 loadingString = "Loading...";
             }
-                
                 
         }
 

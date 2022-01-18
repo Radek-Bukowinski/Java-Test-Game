@@ -92,30 +92,6 @@ public class KeyInput extends KeyAdapter {
                     keyDown[3] = true;
                     facingDirection = DIRECTION.RIGHT;
                 }
-
-                /*
-                if(key == KeyEvent.VK_SPACE)
-                {
-                    if(facingDirection == DIRECTION.RIGHT)
-                    {
-                        renderer.addObject(new Projectile(temporaryObject.x  + 16, temporaryObject.y + 16, 10, 0, ID.Projectile, renderer));
-                    }
-                    if(facingDirection == DIRECTION.LEFT)
-                    {
-                        renderer.addObject(new Projectile(temporaryObject.x + 16, temporaryObject.y + 16, -10, 0, ID.Projectile, renderer));
-                    }
-                    if(facingDirection == DIRECTION.UP)
-                    {
-                        renderer.addObject(new Projectile(temporaryObject.x + 16, temporaryObject.y + 16, 0, -10, ID.Projectile, renderer));
-                    }
-                    if(facingDirection == DIRECTION.DOWN)
-                    {
-                        renderer.addObject(new Projectile(temporaryObject.x + 16, temporaryObject.y + 16, 0, 10, ID.Projectile, renderer));
-                    }
-
-                }
-
-                 */
             }
         }
     }

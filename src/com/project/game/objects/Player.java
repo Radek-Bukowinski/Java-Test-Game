@@ -18,7 +18,7 @@ public class Player extends GameObject {
     private Game game;
     private BufferedImageLoader bufferedImageLoader = new BufferedImageLoader();
     private BufferedImage bufferedImage;
-    
+    private HUD hud;
     private ClientSideConnection clientSideConnection;
     
     //Player.connectToServer();
@@ -44,6 +44,16 @@ public class Player extends GameObject {
         for (int i = 0; i < renderer.objects.size(); i++) {
             if (renderer.objects.get(i).getId() == ID.Block) {
                 BLOCK = renderer.objects.get(i);
+                //break;
+            }
+        }
+    }
+
+    private GameObject COIN = null;
+    public void getCOIN() {
+        for (int i = 0; i < renderer.objects.size(); i++) {
+            if (renderer.objects.get(i).getId() == ID.Coin) {
+                COIN = renderer.objects.get(i);
                 //break;
             }
         }
@@ -79,7 +89,7 @@ public class Player extends GameObject {
                 //System.out.println("PLAYER FOUND");
                 for (int i = 0; i < renderer.objects.size(); i++) {
                     GameObject temporaryObject = renderer.objects.get(i);
-                    if (temporaryObject.getId() == ID.Block || temporaryObject.getId() == ID.Crate || temporaryObject.getId() == ID.Coin) {
+                    if (temporaryObject.getId() == ID.Block || temporaryObject.getId() == ID.Crate) {
                         //System.out.println("BLOCK FOUND");
                         if (PLAYER.getBounds().intersects(temporaryObject.getBounds())) {
                             System.out.println("collision detected");
@@ -115,6 +125,24 @@ public class Player extends GameObject {
 
             if (PLAYER != null) {
 
+                    for (int i = 0; i < renderer.objects.size(); i++) {
+                        GameObject temporaryObject = renderer.objects.get(i);
+                        if (renderer.objects.get(i).getId() == ID.Coin) {
+                            if (PLAYER.getBounds().intersects(temporaryObject.getBounds())) {
+                                renderer.removeObject(temporaryObject);
+                                hud.score += 100;
+                            }
+
+                        }
+                        if (renderer.objects.get(i).getId() == ID.Health) {
+                            if (PLAYER.getBounds().intersects(temporaryObject.getBounds())) {
+                                renderer.removeObject(temporaryObject);
+                                hud.health += 10;
+                            }
+
+                        }
+                }
+
                 if (ENEMY != null) {
                     if (PLAYER.getBounds().intersects(ENEMY.getBounds())) {
                         PLAYER.setHealth(PLAYER.getHealth() - 2);
@@ -122,6 +150,8 @@ public class Player extends GameObject {
                 } else {
                     getEnemy();
                 }
+            } else{
+                getPlayer();
             }
 
 

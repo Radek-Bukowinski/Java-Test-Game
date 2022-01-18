@@ -7,5 +7,6 @@ public enum ID {
     Block(),
     Crate(),
     Coin(),
+    Health(),
     Background();
 }

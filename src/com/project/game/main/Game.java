@@ -6,6 +6,7 @@ import com.project.game.network.GameServer;
 import com.project.game.objects.Block;
 import com.project.game.objects.Coin;
 import com.project.game.objects.Crate;
+import com.project.game.objects.Health;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
@@ -74,7 +75,7 @@ public class Game extends Canvas implements Runnable{
 
     public void initialiseLevel(){
         BufferedImageLoader bufferedImageLoader = new BufferedImageLoader();
-        level = bufferedImageLoader.loadImage("/test.png");
+        level = bufferedImageLoader.loadImage("/level_zero.png");
         loadLevel(level);
     }
 
@@ -90,16 +91,6 @@ public class Game extends Canvas implements Runnable{
                 .getAsInt();
     }
 
-    /*
-    public void callPlayer(){
-        if (windowSTATE == STATE.Game && PLAYER != null){
-
-        }else{
-            getPlayer();
-        }
-    }
-
-     */
     /*
     public static GameObject PLAYER = null;
     public void getPlayer() {
@@ -155,13 +146,8 @@ public class Game extends Canvas implements Runnable{
         double ns = 1000000000 / amountOfTicks;
         double accumulatedFrameTime = 0;
         long timer = System.currentTimeMillis();
-        //int frames = 0;
-        int ticks = 0;
 
-        //long renderLastTime=System.nanoTime();
-        //double fps = 120.0; //MAX FPS
-        //double renderNs=1000000000/fps;
-        //double renderDelta = 0;
+        int ticks = 0;
 
         while(running){
             long timeNow = System.nanoTime();
@@ -171,22 +157,9 @@ public class Game extends Canvas implements Runnable{
                 tick();
                 ticks++;
                 render();
-                //frames++;
                 //System.out.println(accumulatedFrameTime);
                 accumulatedFrameTime--;
             }
-
-            /*
-            now = System.nanoTime();
-            renderDelta += (now - renderLastTime) / renderNs;
-            renderLastTime = now;
-            while(running && renderDelta >= 1){
-                render();
-                frames++;
-                renderDelta--;
-            }
-
-             */
 
             currentSTATE = windowSTATE;
             if(currentSTATE != lastSTATE) {
@@ -196,9 +169,7 @@ public class Game extends Canvas implements Runnable{
 
             if(System.currentTimeMillis() - timer > 1000){
                 timer += 1000;
-                //System.out.println("FPS: " + frames);
                 //System.out.println("Ticks per second: " + ticks);
-                //frames = 0;
                 ticks = 0;
             }
         }
@@ -296,12 +267,16 @@ public class Game extends Canvas implements Runnable{
 
                 }
                 // Brown crates
-                if(red == 128 && green == 51 && blue == 0){
+                if(red == 127 && green == 51 && blue == 0){
                     renderer.addObject(new Crate(xx * 32, yy * 32, 100, ID.Crate));
                 }
                 //Coin
                 if(red == 255 && green == 216 && blue == 0){
                     renderer.addObject(new Coin(xx * 32, yy * 32, 100, ID.Coin));
+                }
+                //Health
+                if(red == 0 && green == 38 && blue == 255){
+                    renderer.addObject(new Health(xx * 32, yy * 32, 100, ID.Health));
                 }
                 //Background
                 /*

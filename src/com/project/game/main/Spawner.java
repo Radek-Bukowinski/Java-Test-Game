@@ -1,5 +1,8 @@
 package com.project.game.main;
 
+import com.project.game.identifiers.ID;
+import com.project.game.objects.Enemy;
+
 import java.util.Random;
 
 public class Spawner {
@@ -19,7 +22,12 @@ public class Spawner {
         ticks++;
         if(ticks >= 1000) {
             ticks = 0;
-            //renderer.addObject(new Enemy(random.nextInt(Game.WIDTH) - 100, random.nextInt(Game.HEIGHT) - 100, 100, ID.Enemy, renderer));
+            int x = random.nextInt(Game.WIDTH) - 100;
+            int y = random.nextInt(Game.HEIGHT) - 100;
+
+
+
+            renderer.addObject(new Enemy(x, y, 100, ID.Enemy, renderer));
         }
     }
 }

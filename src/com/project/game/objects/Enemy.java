@@ -21,19 +21,6 @@ public class Enemy extends GameObject {
 
     private GameObject PLAYER = null;
 
-
-
-    private float directionX;
-    private float directionY;
-
-
-
-    private float attractionX;
-    private float attractionY;
-
-    private float vectorX;
-    private float vectorY;
-
     public void getPlayer() {
         for (int i = 0; i < renderer.objects.size(); i++) {
             if (renderer.objects.get(i).getId() == ID.Player) {
