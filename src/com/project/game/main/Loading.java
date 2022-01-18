@@ -2,7 +2,6 @@ package com.project.game.main;
 
 import com.project.game.identifiers.ID;
 import com.project.game.identifiers.STATE;
-import com.project.game.objects.Enemy;
 import com.project.game.objects.Player;
 
 import java.awt.*;
@@ -51,7 +50,7 @@ public class Loading {
             game.windowSTATE = STATE.Game;
             game.initialiseLevel();
             renderer.addObject(new Player(Game.WIDTH / 2 - 32, Game.HEIGHT / 2 - 32, 100, ID.Player, renderer));
-            renderer.addObject(new Enemy(random.nextInt(Game.WIDTH) - 100, random.nextInt(Game.HEIGHT) - 100, 100, ID.Enemy, renderer));
+            //renderer.addObject(new Enemy(random.nextInt(Game.WIDTH) - 100, random.nextInt(Game.HEIGHT) - 100, 100, ID.Enemy, renderer));
             //renderer.addObject(new Enemy(random.nextInt(Game.WIDTH) - 100, random.nextInt(Game.HEIGHT) - 100, 100, ID.Enemy, renderer));
         }
     }

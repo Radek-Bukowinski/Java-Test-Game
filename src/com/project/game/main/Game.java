@@ -3,10 +3,7 @@ package com.project.game.main;
 import com.project.game.identifiers.ID;
 import com.project.game.identifiers.STATE;
 import com.project.game.network.GameServer;
-import com.project.game.objects.Block;
-import com.project.game.objects.Coin;
-import com.project.game.objects.Crate;
-import com.project.game.objects.Health;
+import com.project.game.objects.*;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
@@ -277,6 +274,10 @@ public class Game extends Canvas implements Runnable{
                 //Health
                 if(red == 0 && green == 38 && blue == 255){
                     renderer.addObject(new Health(xx * 32, yy * 32, 100, ID.Health));
+                }
+                //Enemies
+                if(red == 255 && green == 0 && blue == 0){
+                    renderer.addObject(new Enemy(xx * 32, yy * 32, 100, ID.Enemy, renderer));
                 }
                 //Background
                 /*
