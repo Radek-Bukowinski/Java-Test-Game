@@ -3,10 +3,7 @@ package com.project.game.main;
 import com.project.game.identifiers.ID;
 import com.project.game.identifiers.STATE;
 import com.project.game.network.GameServer;
-import com.project.game.objects.Block;
-import com.project.game.objects.Coin;
-import com.project.game.objects.Crate;
-import com.project.game.objects.Health;
+import com.project.game.objects.*;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
@@ -23,6 +20,8 @@ public class Game extends Canvas implements Runnable{
 
     private STATE currentSTATE;
     private STATE lastSTATE = currentSTATE;
+
+    public String currentLevel = "/level_zero.png";
 
     private Thread thread;
     private boolean running = false;
@@ -52,6 +51,7 @@ public class Game extends Canvas implements Runnable{
 
     Runner runner = new Runner();
 
+    private boolean isInitialised = false;
 
     public Game() {
 
@@ -78,15 +78,31 @@ public class Game extends Canvas implements Runnable{
 
     }
 
+    public static GameObject PLAYER = null;
+    public GameObject getPLAYER() {
+        if (!isInitialised) {
+            for (int i = 0; i < renderer.objects.size(); i++) {
+                if (renderer.objects.get(i).getId() == ID.Player) {
+                    PLAYER = renderer.objects.get(i);
+                    return PLAYER;
+                }
+            }
+        } else {
+            return null;
+        }
+        return null;
+    }
+
     public void initialiseMultiplayer(){
         gameServer = new GameServer();
         gameServer.acceptConnection();
     }
 
-    public void initialiseLevel(){
+    public void initialiseLevel(String path){
         BufferedImageLoader bufferedImageLoader = new BufferedImageLoader();
-        level = bufferedImageLoader.loadImage("/level_zero.png");
+        level = bufferedImageLoader.loadImage(path);
         loadLevel(level);
+        isInitialised = true;
     }
 
     public void loadBackground(){
@@ -147,7 +163,7 @@ public class Game extends Canvas implements Runnable{
     public void run() {
         this.requestFocus();
         timer = new Timer();
-        timer.schedule(runner, 0, 15);
+        timer.schedule(runner, 0, 17);
     }
 
     class Runner extends TimerTask {

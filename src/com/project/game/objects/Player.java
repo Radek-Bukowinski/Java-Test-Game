@@ -142,7 +142,7 @@ public class Player extends GameObject {
 
                         }
                 }
-
+                    /*
                 if (ENEMY != null) {
                     if (PLAYER.getBounds().intersects(ENEMY.getBounds())) {
                         PLAYER.setHealth(PLAYER.getHealth() - 2);
@@ -150,6 +150,8 @@ public class Player extends GameObject {
                 } else {
                     getEnemy();
                 }
+
+                     */
             } else{
                 getPlayer();
             }

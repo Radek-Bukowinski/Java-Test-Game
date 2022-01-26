@@ -3,6 +3,7 @@ package com.project.game.main;
 import com.project.game.identifiers.DIRECTION;
 import com.project.game.identifiers.ID;
 import com.project.game.identifiers.STATE;
+import com.project.game.objects.Enemy;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -16,6 +17,16 @@ public class KeyInput extends KeyAdapter {
     private boolean[] keyDown = new boolean[4];
 
     private DIRECTION facingDirection = DIRECTION.RIGHT;
+
+    GameObject temporaryObject = null;
+    public void findPlayer(){
+        for(int i = 0; i < renderer.objects.size(); i++) {
+            if (renderer.objects.get(i).getId() == ID.Player) {
+                temporaryObject = renderer.objects.get(i);
+                break;
+            }
+        }
+    }
 
     public KeyInput(RendererHandler renderer)
     {
@@ -60,6 +71,15 @@ public class KeyInput extends KeyAdapter {
         if(key == KeyEvent.VK_F)
         {
             HUD.health -= 10;
+        }
+
+        if(key == KeyEvent.VK_X){
+            if(temporaryObject != null){
+                renderer.addObject(new Enemy(temporaryObject.getX() + 5, temporaryObject.getY(), 100, ID.Enemy, renderer));
+            }else{
+                findPlayer();
+            }
+
         }
 
         for(int i = 0; i < renderer.objects.size(); i++)

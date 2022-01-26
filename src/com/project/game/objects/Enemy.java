@@ -100,43 +100,115 @@ public class Enemy extends GameObject {
     }
 
     private void collision() {
-        if(Game.windowSTATE == STATE.Game) {
-            if(ENEMY != null) {
-                //System.out.println("PLAYER FOUND");
-                for (int i = 0; i < renderer.objects.size(); i++) {
-                    GameObject temporaryObject = renderer.objects.get(i);
-                    if (temporaryObject.getId() == ID.Block || temporaryObject.getId() == ID.Crate || temporaryObject.getId() == ID.Coin) {
-                        //System.out.println("BLOCK FOUND");
-                        if (ENEMY.getBounds().intersects(temporaryObject.getBounds())) {
-                            //System.out.println("collision detected");
-                            if(horizontalCollision().intersects(temporaryObject.getBounds())){
-                                if(velocityX > 0){
-                                    velocityX *= -1;
-                                    //x = temporaryObject.getX() - 32;
-                                }else if(velocityX < 0){
-                                    velocityX *= -1;
-                                    //x = temporaryObject.getX() + 32;
-                                }
-                            }
-
-                            if(verticalCollision().intersects(temporaryObject.getBounds())){
-                                if(velocityY > 0){
-                                    velocityY *= -1;
-                                    //y = temporaryObject.getY() - 32;
-                                }else if(velocityY < 0){
-                                    velocityY *= -1;
-                                    //y = temporaryObject.getY() + 32;
-                                }
-                            }
+        for (int i = 0; i < renderer.objects.size(); i++) {
+            GameObject temporaryObject = renderer.objects.get(i);
+            if (temporaryObject.getId() != ID.Player) {
+                if (this.getBounds().intersects(temporaryObject.getBounds())) {
+                    //System.out.println("collision detected");
+                    if (horizontalCollision().intersects(temporaryObject.getBounds())) {
+                        if (velocityX > 0) {
+                            velocityX *= -1;
+                            //x = temporaryObject.getX() - 32;
+                        } else if (velocityX < 0) {
+                            velocityX *= -1;
+                            //x = temporaryObject.getX() + 32;
                         }
-
-                        //break;
                     }
 
+                    if (verticalCollision().intersects(temporaryObject.getBounds())) {
+                        if (velocityY > 0) {
+                            velocityY *= -1;
+                            //y = temporaryObject.getY() - 32;
+                        } else if (velocityY < 0) {
+                            velocityY *= -1;
+                            //y = temporaryObject.getY() + 32;
+                        }
+                    }
                 }
-            } else{
-                getEnemy();
+            }else{
+                if(PLAYER != null){
+                    if (PLAYER.getBounds().intersects(ENEMY.getBounds())) {
+                        PLAYER.setHealth(PLAYER.getHealth() - 2);
+                    }
+                } else{
+                    getPlayer();
+                }
             }
+        }
+
+
+        /*
+        for (int i = 0; i < renderer.objects.size(); i++) {
+            GameObject temporaryObject = renderer.objects.get(i);
+            if (temporaryObject.getId() == ID.Block || temporaryObject.getId() == ID.Crate) {
+                if (this.getBounds().intersects(temporaryObject.getBounds())) {
+                    //System.out.println("collision detected");
+                    if (horizontalCollision().intersects(temporaryObject.getBounds())) {
+                        if (velocityX > 0) {
+                            velocityX *= -1;
+                            //x = temporaryObject.getX() - 32;
+                        } else if (velocityX < 0) {
+                            velocityX *= -1;
+                            //x = temporaryObject.getX() + 32;
+                        }
+                    }
+
+                    if (verticalCollision().intersects(temporaryObject.getBounds())) {
+                        if (velocityY > 0) {
+                            velocityY *= -1;
+                            //y = temporaryObject.getY() - 32;
+                        } else if (velocityY < 0) {
+                            velocityY *= -1;
+                            //y = temporaryObject.getY() + 32;
+                        }
+                    }
+                }
+            }
+        }
+
+         */
+
+        /*
+        if(Game.windowSTATE == STATE.Game) {
+            for (int x = 0; x < renderer.objects.size(); x++) {
+                GameObject enemyObject = renderer.objects.get(x);
+                if (enemyObject.getId() == ID.Enemy) {
+                    //System.out.println("PLAYER FOUND");
+                    for (int i = 0; i < renderer.objects.size(); i++) {
+                        GameObject temporaryObject = renderer.objects.get(i);
+                        if (temporaryObject.getId() == ID.Block || temporaryObject.getId() == ID.Crate || temporaryObject.getId() == ID.Coin) {
+                            //System.out.println("BLOCK FOUND");
+                            if (enemyObject.getBounds().intersects(temporaryObject.getBounds())) {
+                                //System.out.println("collision detected");
+                                if (horizontalCollision().intersects(temporaryObject.getBounds())) {
+                                    if (velocityX > 0) {
+                                        velocityX *= -1;
+                                        //x = temporaryObject.getX() - 32;
+                                    } else if (velocityX < 0) {
+                                        velocityX *= -1;
+                                        //x = temporaryObject.getX() + 32;
+                                    }
+                                }
+
+                                if (verticalCollision().intersects(temporaryObject.getBounds())) {
+                                    if (velocityY > 0) {
+                                        velocityY *= -1;
+                                        //y = temporaryObject.getY() - 32;
+                                    } else if (velocityY < 0) {
+                                        velocityY *= -1;
+                                        //y = temporaryObject.getY() + 32;
+                                    }
+                                }
+                            }
+
+                            //break;
+                        }
+
+                    }
+                }
+            }
+
+         */
 
             /*
             if (PLAYER != null) {
@@ -152,7 +224,7 @@ public class Enemy extends GameObject {
              */
 
 
-        }
+
     }
 
     public Rectangle horizontalCollision(){

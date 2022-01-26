@@ -110,9 +110,12 @@ public class UI extends MouseAdapter {
             resetButtonColors();
             //singleplayer button
             if (mouseOver(realMouseX, realMouseY, 340, 325, 200, 40)) {
-                //game.gameMODE = MODE.Singleplayer;
-                game.windowSTATE = STATE.Loading;
+                game.windowSTATE = STATE.Game;
+                game.initialiseLevel(game.currentLevel);
+                renderer.addObject(new Player(Game.WIDTH / 2 - 32, Game.HEIGHT / 2 - 32, 100, ID.Player, renderer));
+                game.getPLAYER();
             }
+
 
             //multiplayer button
             if (mouseOver(realMouseX, realMouseY, 740, 325, 200, 40)) {
