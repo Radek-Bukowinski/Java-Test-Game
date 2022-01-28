@@ -9,6 +9,8 @@ public class Spawner {
 
     private int ticks = hud.score;
 
+    private GameObject enemy;
+
 
     public Spawner(RendererHandler renderer, HUD hud) {
         this.renderer = renderer;
@@ -16,15 +18,16 @@ public class Spawner {
     }
 
     public void tick() {
+
+        if(renderer.enemies.size() < 5){
+            //enemy = renderer.addEnemy(new Enemy((, , 100, ID.Enemy, renderer));
+        }
+
         ticks++;
         if(ticks >= 1000) {
             ticks = 0;
-            //int x = random.nextInt(Game.WIDTH) - 100;
-            //int y = random.nextInt(Game.HEIGHT) - 100;
 
 
-
-            //renderer.addObject(new Enemy(x, y, 100, ID.Enemy, renderer));
         }
     }
 }

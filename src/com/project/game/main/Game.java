@@ -10,7 +10,6 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 import java.util.Timer;
-import java.util.TimerTask;
 
 public class Game extends Canvas implements Runnable{
     public static final int WIDTH = 1280, HEIGHT = WIDTH / 16 * 9;
@@ -49,14 +48,11 @@ public class Game extends Canvas implements Runnable{
 
     Timer timer;
 
-    Runner runner = new Runner();
+    //Runner runner = new Runner();
 
-    private boolean isInitialised = false;
+    public boolean isInitialised = false;
 
     public Game() {
-
-
-
 
         renderer = new RendererHandler();
         camera = new Camera(0, 0);
@@ -80,7 +76,7 @@ public class Game extends Canvas implements Runnable{
 
     public static GameObject PLAYER = null;
     public GameObject getPLAYER() {
-        if (!isInitialised) {
+        if (isInitialised == true) {
             for (int i = 0; i < renderer.objects.size(); i++) {
                 if (renderer.objects.get(i).getId() == ID.Player) {
                     PLAYER = renderer.objects.get(i);
@@ -102,7 +98,7 @@ public class Game extends Canvas implements Runnable{
         BufferedImageLoader bufferedImageLoader = new BufferedImageLoader();
         level = bufferedImageLoader.loadImage(path);
         loadLevel(level);
-        isInitialised = true;
+        //isInitialised = true;
     }
 
     public void loadBackground(){
@@ -162,9 +158,36 @@ public class Game extends Canvas implements Runnable{
     @Override
     public void run() {
         this.requestFocus();
-        timer = new Timer();
-        timer.schedule(runner, 0, 17);
+        //timer = new Timer();
+        //timer.schedule(runner, 0, 17);
+        long lastTime = System.nanoTime();
+        double tps = 60.0;
+        double ns = 1000000000 / tps;
+        double accumulatedFrameTime = 0;
+        long timer = System.currentTimeMillis();
+        int frames = 0;
+
+        while(running){
+            long now = System.nanoTime();
+            accumulatedFrameTime += (now - lastTime) / ns;
+            lastTime = now;
+            while(accumulatedFrameTime >= 1){
+                tick();
+                render();
+                frames++;
+                accumulatedFrameTime--;
+            }
+
+            if(System.currentTimeMillis() - timer > 1000){
+                timer += 1000;
+                System.out.println(frames);
+                frames = 0;
+            }
+        }
+        //stop();
     }
+
+    /*
 
     class Runner extends TimerTask {
 
@@ -176,6 +199,8 @@ public class Game extends Canvas implements Runnable{
             }
         }
     }
+
+     */
 
     /*
     public void run() {
@@ -333,11 +358,13 @@ public class Game extends Canvas implements Runnable{
                 // Gray walls
                 if(red == 128 && green == 128 && blue == 128){
                     renderer.addObject(new Block(xx * 32, yy * 32, 100, ID.Block));
+                    renderer.addCollidible(new Block(xx * 32, yy * 32, 100, ID.Block));
 
                 }
                 // Brown crates
                 if(red == 127 && green == 51 && blue == 0){
                     renderer.addObject(new Crate(xx * 32, yy * 32, 100, ID.Crate));
+                    renderer.addCollidible(new Crate(xx * 32, yy * 32, 100, ID.Crate));
                 }
                 //Coin
                 if(red == 255 && green == 216 && blue == 0){
@@ -349,14 +376,14 @@ public class Game extends Canvas implements Runnable{
                 }
                 //Enemies
                 if(red == 255 && green == 0 && blue == 0){
-                    //renderer.addObject(new Enemy(xx * 32, yy * 32, 100, ID.Enemy, renderer));
+                    renderer.addObject(new Enemy(xx * 32, yy * 32, 100, ID.Enemy, renderer));
                 }
                 //Background
-                /*
+
                 if(red == 0){
-                    renderer.addObject(new Background(xx * 32, yy * 32, 100, ID.Background));
+                    renderer.addBackground( new Background(xx * 32, yy * 32, 100, ID.Background));
                 }
-                 */
+
             }
         }
     }

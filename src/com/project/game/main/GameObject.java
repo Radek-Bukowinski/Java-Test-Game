@@ -31,7 +31,7 @@ public abstract class GameObject {
     public abstract void tick();
     public abstract void render(Graphics graphics);
 
-    public abstract Rectangle  getBounds();
+    public abstract Rectangle getBounds();
 
     public float getX() { return x; }
     public void setX(int x) { this.x = x; }

@@ -1,9 +1,7 @@
 package com.project.game.objects;
 
 import com.project.game.identifiers.ID;
-import com.project.game.identifiers.STATE;
 import com.project.game.main.BufferedImageLoader;
-import com.project.game.main.Game;
 import com.project.game.main.GameObject;
 import com.project.game.main.RendererHandler;
 
@@ -54,55 +52,12 @@ public class Enemy extends GameObject {
         y += velocityY;
 
         collision();
-
-        //vectorX = Game.getRandomNumber(-5, 5);
-        //vectorY = Game.getRandomNumber(-5, 5);
-
-        /*
-        if(PLAYER != null) {
-
-            float differenceX = (float) x - PLAYER.getX() - 16;
-            float differenceY = (float) y - PLAYER.getY() - 16;
-            float distance = (float) Math.sqrt((x - PLAYER.getX()) * (x - PLAYER.getX()) + (y - PLAYER.getY()) * (y - PLAYER.getY()));
-
-            attractionX =  ((-1 / distance) * differenceX);
-            attractionY =  ((-1 / distance) * differenceY);
-
-
-
-            //velocityX =  ((-1 / distance) * differenceX);
-            //velocityY =  ((-1 / distance) * differenceY);
-
-            directionX =  velocityX;
-            directionY =  velocityY;
-        } else{
-            getPlayer();
-        }
-
-         */
-
-       //vectorX = (attractionX + directionX) / 2;
-       //vectorY = (attractionY + directionY) / 2;
-
-        //x += velocityX;
-        //y += velocityY;
-
-        /*
-        if(y <= 0 || y >= Game.HEIGHT - 32) {
-            velocityY *= -1;
-        }
-        if(x <= 0 || x >= Game.WIDTH - 16) {
-            velocityX *= -1;
-        }
-
-         */
-
     }
 
     private void collision() {
         for (int i = 0; i < renderer.objects.size(); i++) {
             GameObject temporaryObject = renderer.objects.get(i);
-            if (temporaryObject.getId() != ID.Player) {
+            if (temporaryObject.getId() == ID.Block || temporaryObject.getId() == ID.Crate) {
                 if (this.getBounds().intersects(temporaryObject.getBounds())) {
                     //System.out.println("collision detected");
                     if (horizontalCollision().intersects(temporaryObject.getBounds())) {
@@ -125,15 +80,12 @@ public class Enemy extends GameObject {
                         }
                     }
                 }
-            }else{
-                if(PLAYER != null){
-                    if (PLAYER.getBounds().intersects(ENEMY.getBounds())) {
-                        PLAYER.setHealth(PLAYER.getHealth() - 2);
-                    }
-                } else{
-                    getPlayer();
-                }
             }
+                if(temporaryObject.getId() == ID.Player){
+                    if (temporaryObject.getBounds().intersects(this.getBounds())) {
+                        temporaryObject.setHealth(temporaryObject.getHealth() - 2);
+                    }
+                }
         }
 
 

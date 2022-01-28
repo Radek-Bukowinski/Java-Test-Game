@@ -14,7 +14,7 @@ public class Background extends GameObject {
 
     public Background(float x, float y, int health, ID id) {
         super(x, y, health, id);
-        bufferedImage = bufferedImageLoader.loadImage("/background.png");
+        //bufferedImage = bufferedImageLoader.loadImage("/background.png");
     }
 
     @Override
@@ -24,8 +24,8 @@ public class Background extends GameObject {
 
     @Override
     public void render(Graphics graphics) {
-        graphics.setColor(Color.black);
-        graphics.drawImage(bufferedImage, (int) x, (int) y, null);
+        //graphics.setColor(Color.black);
+        //graphics.drawImage(bufferedImage, (int) x, (int) y, null);
     }
 
     @Override

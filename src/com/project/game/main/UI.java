@@ -110,10 +110,14 @@ public class UI extends MouseAdapter {
             resetButtonColors();
             //singleplayer button
             if (mouseOver(realMouseX, realMouseY, 340, 325, 200, 40)) {
+                game.windowSTATE = STATE.Loading;
+                /*
                 game.windowSTATE = STATE.Game;
                 game.initialiseLevel(game.currentLevel);
-                renderer.addObject(new Player(Game.WIDTH / 2 - 32, Game.HEIGHT / 2 - 32, 100, ID.Player, renderer));
-                game.getPLAYER();
+                renderer.addObject(new Player(Game.WIDTH / 2 - 32, Game.HEIGHT / 2 - 32, 100, ID.Player, renderer, game));
+                game.isInitialised = true;
+
+                 */
             }
 
 
@@ -187,7 +191,7 @@ public class UI extends MouseAdapter {
                 HUD.level = 1;
                 HUD.score = 0;
 
-                renderer.addObject(new Player(Game.WIDTH / 2 - 32, Game.HEIGHT / 2 - 32, 100, ID.Player, renderer));
+                renderer.addObject(new Player(Game.WIDTH / 2 - 32, Game.HEIGHT / 2 - 32, 100, ID.Player, renderer, game));
                 renderer.addObject(new Enemy(random.nextInt(Game.WIDTH) - 100, random.nextInt(Game.HEIGHT) - 100, 100, ID.Enemy, renderer));
                 renderer.addObject(new Enemy(random.nextInt(Game.WIDTH) - 100, random.nextInt(Game.HEIGHT) - 100, 100, ID.Enemy, renderer));
             }
@@ -296,7 +300,7 @@ public class UI extends MouseAdapter {
 
 
     @Override
-    public void mouseReleased(MouseEvent event) {
+    public void mouseReleased(MouseEvent event) throws NullPointerException{
         super.mouseReleased(event);
         System.out.println("mouse released");
         if(game.windowSTATE == STATE.Game) {

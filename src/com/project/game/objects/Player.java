@@ -20,53 +20,12 @@ public class Player extends GameObject {
     private BufferedImage bufferedImage;
     private HUD hud;
     private ClientSideConnection clientSideConnection;
-    
-    //Player.connectToServer();
 
-    public Player(int x, int y, int health, ID id, RendererHandler renderer) {
+    public Player(int x, int y, int health, ID id, RendererHandler renderer, Game game) {
         super(x, y, health, id);
         this.renderer = renderer;
-        bufferedImage = bufferedImageLoader.loadImage("/player.png");
-    }
-
-    private GameObject PLAYER = null;
-    public void getPlayer() {
-        for (int i = 0; i < renderer.objects.size(); i++) {
-            if (renderer.objects.get(i).getId() == ID.Player) {
-                PLAYER = renderer.objects.get(i);
-                break;
-            }
-        }
-    }
-
-    private GameObject BLOCK = null;
-    public void getBLOCK() {
-        for (int i = 0; i < renderer.objects.size(); i++) {
-            if (renderer.objects.get(i).getId() == ID.Block) {
-                BLOCK = renderer.objects.get(i);
-                //break;
-            }
-        }
-    }
-
-    private GameObject COIN = null;
-    public void getCOIN() {
-        for (int i = 0; i < renderer.objects.size(); i++) {
-            if (renderer.objects.get(i).getId() == ID.Coin) {
-                COIN = renderer.objects.get(i);
-                //break;
-            }
-        }
-    }
-
-    private GameObject ENEMY = null;
-    public void getEnemy() {
-        for (int i = 0; i < renderer.objects.size(); i++) {
-            if (renderer.objects.get(i).getId() == ID.Enemy) {
-                ENEMY = renderer.objects.get(i);
-                break;
-            }
-        }
+        this.game = game;
+        bufferedImage = bufferedImageLoader.loadImage("/sprite.png");
     }
 
     @Override
@@ -74,16 +33,66 @@ public class Player extends GameObject {
         x += velocityX;
         y += velocityY;
 
-        //x = (int) game.constrain((int) x, 0, Game.WIDTH - 32);
-        //y = (int) game.constrain((int) y, 0, Game.HEIGHT - 60);
-
         HUD.health = health;
 
         collision();
         isAlive();
+
     }
 
+
+
+
+
     private void collision() {
+            for (int i = 0; i < renderer.collidibles.size(); i++) {
+                GameObject temporaryObject = renderer.collidibles.get(i);
+                if (temporaryObject.getId() == ID.Block || temporaryObject.getId() == ID.Crate) {
+                    if (this.getBounds().intersects(temporaryObject.getBounds())) {
+                        System.out.println("collision detected");
+                        if (horizontalCollision().intersects(temporaryObject.getBounds())) {
+                            if (velocityX > 0) {
+                                velocityX = 0;
+                                x = temporaryObject.getX() - 32;
+                            } else if (velocityX < 0) {
+                                velocityX = 0;
+                                x = temporaryObject.getX() + 32;
+                            }
+                        }
+
+                        if (verticalCollision().intersects(temporaryObject.getBounds())) {
+                            if (velocityY > 0) {
+                                velocityY = 0;
+                                y = temporaryObject.getY() - 32;
+                            } else if (velocityY < 0) {
+                                velocityY = 0;
+                                y = temporaryObject.getY() + 32;
+                            }
+                        }
+                    }
+                }
+            }
+
+
+        for (int i = 0; i < renderer.objects.size(); i++) {
+            GameObject temporaryObject = renderer.objects.get(i);
+            if (renderer.objects.get(i).getId() == ID.Coin) {
+                if (this.getBounds().intersects(temporaryObject.getBounds())) {
+                    renderer.removeObject(temporaryObject);
+                    hud.score += 100;
+                }
+
+            }
+            if (renderer.objects.get(i).getId() == ID.Health) {
+                if (this.getBounds().intersects(temporaryObject.getBounds())) {
+                    renderer.removeObject(temporaryObject);
+                    hud.health += 10;
+                }
+
+            }
+        }
+
+        /*
         if(game.windowSTATE == STATE.Game) {
             if(PLAYER != null) {
                 //System.out.println("PLAYER FOUND");
@@ -91,7 +100,7 @@ public class Player extends GameObject {
                     GameObject temporaryObject = renderer.objects.get(i);
                     if (temporaryObject.getId() == ID.Block || temporaryObject.getId() == ID.Crate) {
                         //System.out.println("BLOCK FOUND");
-                        if (PLAYER.getBounds().intersects(temporaryObject.getBounds())) {
+                        if (game.PLAYER.getBounds().intersects(temporaryObject.getBounds())) {
                             System.out.println("collision detected");
                             if(horizontalCollision().intersects(temporaryObject.getBounds())){
                                 if(velocityX > 0){
@@ -123,6 +132,8 @@ public class Player extends GameObject {
             }
 
 
+
+
             if (PLAYER != null) {
 
                     for (int i = 0; i < renderer.objects.size(); i++) {
@@ -142,7 +153,7 @@ public class Player extends GameObject {
 
                         }
                 }
-                    /*
+
                 if (ENEMY != null) {
                     if (PLAYER.getBounds().intersects(ENEMY.getBounds())) {
                         PLAYER.setHealth(PLAYER.getHealth() - 2);
@@ -151,16 +162,17 @@ public class Player extends GameObject {
                     getEnemy();
                 }
 
-                     */
+
             } else{
                 getPlayer();
             }
+            */
 
 
 
 
-        }
     }
+
 
     public Rectangle horizontalCollision(){
         float boundaryX = x + velocityX;
@@ -181,7 +193,7 @@ public class Player extends GameObject {
     }
 
     private void isAlive() {
-        if(PLAYER.getHealth() == 0) {
+        if(this.getHealth() == 0) {
             Game.windowSTATE = STATE.Death;
         }
     }
@@ -205,8 +217,6 @@ public class Player extends GameObject {
               }
         }
     }
-    
-
 
     @Override
     public void render(Graphics graphics) {
@@ -219,4 +229,6 @@ public class Player extends GameObject {
     public Rectangle getBounds() {
         return new Rectangle((int)x, (int)y, 32, 32);
     }
+
+
 }

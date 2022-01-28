@@ -72,6 +72,8 @@ public class Projectile extends GameObject {
         for (int i = 0; i < renderer.objects.size(); i++) {
             GameObject temporaryObject = renderer.objects.get(i);
 
+
+
             if (temporaryObject.getId() == ID.Enemy) {
                 if (getBounds().intersects(temporaryObject.getBounds())) {
                     renderer.removeObject(temporaryObject);
@@ -79,11 +81,27 @@ public class Projectile extends GameObject {
                 }
             }
 
-            if (temporaryObject.getId() == ID.Coin || temporaryObject.getId() == ID.Crate || temporaryObject.getId() == ID.Block) {
+
+            /*
+            if(temporaryObject.getId() != ID.Player) {
+                if (getBounds().intersects(temporaryObject.getBounds())) {
+                    renderer.removeObject(temporaryObject);
+                    if (temporaryObject.getId() == ID.Enemy) {
+                        hud.score += 100;
+                    }
+                }
+            }
+
+             */
+
+
+            if (temporaryObject.getId() == ID.Crate || temporaryObject.getId() == ID.Block) {
                 if (getBounds().intersects(temporaryObject.getBounds())) {
                     renderer.removeObject(this);
                 }
             }
+
+
         }
     }
 

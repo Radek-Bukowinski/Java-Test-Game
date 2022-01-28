@@ -5,11 +5,13 @@ import java.util.LinkedList;
 
 public class RendererHandler {
     public LinkedList<GameObject> objects = new LinkedList<GameObject>();
+    public LinkedList<GameObject> enemies = new LinkedList<GameObject>();
+    public LinkedList<GameObject> collidibles = new LinkedList<GameObject>();
+    public LinkedList<GameObject> background = new LinkedList<GameObject>();
     //public LinkedList<GameObject> outOfRender = new LinkedList<GameObject>();
     public void tick() {
         for(int i = 0; i < objects.size(); i++) {
             GameObject temporaryObject = objects.get(i);
-
             temporaryObject.tick();
         }
     }
@@ -37,5 +39,32 @@ public class RendererHandler {
 
     public void removeObject(GameObject object) {
         this.objects.remove(object);
+    }
+
+    public GameObject addEnemy(GameObject object) {
+        this.enemies.add(object);
+        return object;
+    }
+
+    public void removeEnemy(GameObject object) {
+        this.enemies.remove(object);
+    }
+
+    public GameObject addCollidible(GameObject object) {
+        this.collidibles.add(object);
+        return object;
+    }
+
+    public void removeCollidible(GameObject object) {
+        this.collidibles.remove(object);
+    }
+
+    public GameObject addBackground(GameObject object) {
+        this.collidibles.add(object);
+        return object;
+    }
+
+    public void removeBackground(GameObject object) {
+        this.collidibles.remove(object);
     }
 }
