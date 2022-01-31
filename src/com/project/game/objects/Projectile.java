@@ -69,17 +69,14 @@ public class Projectile extends GameObject {
     }
 
     private void collision() {
-        for (int i = 0; i < renderer.objects.size(); i++) {
-            GameObject temporaryObject = renderer.objects.get(i);
-
-
-
-            if (temporaryObject.getId() == ID.Enemy) {
+        for (int i = 0; i < renderer.enemies.size(); i++) {
+            Enemy temporaryObject = (Enemy) renderer.enemies.get(i);
                 if (getBounds().intersects(temporaryObject.getBounds())) {
-                    renderer.removeObject(temporaryObject);
+                    renderer.removeEnemy(temporaryObject);
+                    //Spawner.enemyCount--;
                     hud.score += 100;
                 }
-            }
+
 
 
             /*

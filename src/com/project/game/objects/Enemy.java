@@ -2,6 +2,7 @@ package com.project.game.objects;
 
 import com.project.game.identifiers.ID;
 import com.project.game.main.BufferedImageLoader;
+import com.project.game.main.Game;
 import com.project.game.main.GameObject;
 import com.project.game.main.RendererHandler;
 
@@ -19,6 +20,16 @@ public class Enemy extends GameObject {
 
     private GameObject PLAYER = null;
 
+    private int uid;
+
+    public int getUid() {
+        return uid;
+    }
+
+    public void setUid(int uid) {
+        this.uid = uid;
+    }
+
     public void getPlayer() {
         for (int i = 0; i < renderer.objects.size(); i++) {
             if (renderer.objects.get(i).getId() == ID.Player) {
@@ -30,19 +41,20 @@ public class Enemy extends GameObject {
 
     private GameObject ENEMY = null;
     public void getEnemy() {
-        for (int i = 0; i < renderer.objects.size(); i++) {
-            if (renderer.objects.get(i).getId() == ID.Enemy) {
-                ENEMY = renderer.objects.get(i);
+        for (int i = 0; i < renderer.enemies.size(); i++) {
+            if (renderer.enemies.get(i).getId() == ID.Enemy) {
+                ENEMY = renderer.enemies.get(i);
                 break;
             }
         }
     }
 
-    public Enemy(float x, float y, int health, ID id, RendererHandler renderer) {
+    public Enemy(float x, float y, int health, ID id, RendererHandler renderer, int uid) {
         super(x, y, health, id);
         this.renderer = renderer;
-        velocityY = 1;
-        velocityX = 1;
+        this.uid = uid;
+        velocityY = Game.getRandomNumber(-1, 1);
+        velocityX = Game.getRandomNumber(-1, 1);
         bufferedImage = bufferedImageLoader.loadImage("/enemy.png");
     }
 

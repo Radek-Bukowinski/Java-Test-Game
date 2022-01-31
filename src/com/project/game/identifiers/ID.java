@@ -8,5 +8,6 @@ public enum ID {
     Crate(),
     Coin(),
     Health(),
-    Background();
+    Background(),
+    Spawner();
 }

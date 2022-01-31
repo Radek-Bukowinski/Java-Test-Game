@@ -10,7 +10,6 @@ package com.project.game.main;
 
 import com.project.game.identifiers.ID;
 import com.project.game.identifiers.STATE;
-import com.project.game.objects.Enemy;
 import com.project.game.objects.Player;
 import com.project.game.objects.Projectile;
 
@@ -192,8 +191,8 @@ public class UI extends MouseAdapter {
                 HUD.score = 0;
 
                 renderer.addObject(new Player(Game.WIDTH / 2 - 32, Game.HEIGHT / 2 - 32, 100, ID.Player, renderer, game));
-                renderer.addObject(new Enemy(random.nextInt(Game.WIDTH) - 100, random.nextInt(Game.HEIGHT) - 100, 100, ID.Enemy, renderer));
-                renderer.addObject(new Enemy(random.nextInt(Game.WIDTH) - 100, random.nextInt(Game.HEIGHT) - 100, 100, ID.Enemy, renderer));
+                //renderer.addObject(new Enemy(random.nextInt(Game.WIDTH) - 100, random.nextInt(Game.HEIGHT) - 100, 100, ID.Enemy, renderer));
+                //renderer.addObject(new Enemy(random.nextInt(Game.WIDTH) - 100, random.nextInt(Game.HEIGHT) - 100, 100, ID.Enemy, renderer));
             }
             if(mouseOver(realMouseX, realMouseY, 540, 375, 200, 50)) {
                 System.exit(0);
@@ -337,7 +336,7 @@ public class UI extends MouseAdapter {
 
             graphics.setColor(infoButtonColor);
             graphics.drawRect(640 - 100, 400 - 25, 200, 40);
-            graphics.drawString("Info", 618, 402);
+            graphics.drawString("Options", 618, 402);
 
             graphics.setColor(exitButtonColor);
             graphics.drawRect(640 - 100, 460 - 25, 200, 40);

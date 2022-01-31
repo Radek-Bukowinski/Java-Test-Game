@@ -16,6 +16,8 @@ public class Loading {
     private String loadingString = "Loading";
     private Color white = Color.white;
 
+    public static GameObject playerObject;
+
     public Loading(Game game, RendererHandler renderer)
     {
         this.game = game;
@@ -50,7 +52,23 @@ public class Loading {
         if(progressLevel == 1100) {
             game.windowSTATE = STATE.Game;
             game.initialiseLevel(game.currentLevel);
-            renderer.addObject(new Player(Game.WIDTH / 2 - 32, Game.HEIGHT / 2 - 32, 100, ID.Player, renderer, game));
+            playerObject = renderer.addObject(new Player(Game.WIDTH / 2 - 32, Game.HEIGHT / 2 - 32, 100, ID.Player, renderer, game));
+
+            renderer.addObject(new Spawner((int) (playerObject.getX() + 64), (int) (playerObject.getY()), 100, ID.Spawner, renderer, 1));
+            renderer.addSpawner(new Spawner((int) (playerObject.getX() + 64), (int) (playerObject.getY()), 100, ID.Spawner, renderer, 1));
+
+            renderer.addObject(new Spawner((int) (playerObject.getX() - 64), (int) (playerObject.getY()), 100, ID.Spawner, renderer, 2));
+            renderer.addSpawner(new Spawner((int) (playerObject.getX() - 64), (int) (playerObject.getY()), 100, ID.Spawner, renderer, 2));
+
+
+            renderer.addObject(new Spawner((int) (playerObject.getX()), (int) (playerObject.getY() + 64), 100, ID.Spawner, renderer, 3));
+            renderer.addSpawner(new Spawner((int) (playerObject.getX() + 64), (int) (playerObject.getY() + 64), 100, ID.Spawner, renderer, 3));
+
+
+            renderer.addObject(new Spawner((int) (playerObject.getX()), (int) (playerObject.getY() - 64), 100, ID.Spawner, renderer, 4));
+            renderer.addSpawner(new Spawner((int) (playerObject.getX()), (int) (playerObject.getY() - 64), 100, ID.Spawner, renderer, 4));
+
+
             //renderer.addObject(new Enemy(random.nextInt(Game.WIDTH) - 100, random.nextInt(Game.HEIGHT) - 100, 100, ID.Enemy, renderer));
             //renderer.addObject(new Enemy(random.nextInt(Game.WIDTH) - 100, random.nextInt(Game.HEIGHT) - 100, 100, ID.Enemy, renderer));
         }

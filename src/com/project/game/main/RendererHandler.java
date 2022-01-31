@@ -7,12 +7,16 @@ public class RendererHandler {
     public LinkedList<GameObject> objects = new LinkedList<GameObject>();
     public LinkedList<GameObject> enemies = new LinkedList<GameObject>();
     public LinkedList<GameObject> collidibles = new LinkedList<GameObject>();
-    public LinkedList<GameObject> background = new LinkedList<GameObject>();
-    //public LinkedList<GameObject> outOfRender = new LinkedList<GameObject>();
+    public LinkedList<GameObject> spawners = new LinkedList<GameObject>();
+
     public void tick() {
         for(int i = 0; i < objects.size(); i++) {
             GameObject temporaryObject = objects.get(i);
             temporaryObject.tick();
+        }
+        for(int i = 0; i < enemies.size(); i++) {
+            GameObject enemyObject = enemies.get(i);
+            enemyObject.tick();
         }
     }
 
@@ -20,15 +24,10 @@ public class RendererHandler {
         for(int i = 0; i < objects.size(); i++) {
             GameObject temporaryObject = objects.get(i);
             temporaryObject.render(graphics);
-            /*
-            if(temporaryObject.isRendered == false){
-                GameObject holder = temporaryObject;
-                outOfRender.add(holder);  
-                objects.remove(temporaryObject);
-            } else{
-                  temporaryObject.render(graphics);
-            }
-            */
+        }
+        for(int i = 0; i < enemies.size(); i++) {
+            GameObject enemyObject1 = enemies.get(i);
+            enemyObject1.render(graphics);
         }
     }
 
@@ -59,12 +58,13 @@ public class RendererHandler {
         this.collidibles.remove(object);
     }
 
-    public GameObject addBackground(GameObject object) {
-        this.collidibles.add(object);
+    public GameObject addSpawner(GameObject object) {
+        this.spawners.add(object);
         return object;
     }
 
-    public void removeBackground(GameObject object) {
-        this.collidibles.remove(object);
+    public void removeSpawner(GameObject object) {
+        this.spawners.remove(object);
     }
+
 }

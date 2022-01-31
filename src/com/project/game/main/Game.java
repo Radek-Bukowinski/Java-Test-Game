@@ -3,7 +3,10 @@ package com.project.game.main;
 import com.project.game.identifiers.ID;
 import com.project.game.identifiers.STATE;
 import com.project.game.network.GameServer;
-import com.project.game.objects.*;
+import com.project.game.objects.Block;
+import com.project.game.objects.Coin;
+import com.project.game.objects.Crate;
+import com.project.game.objects.Health;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
@@ -70,8 +73,6 @@ public class Game extends Canvas implements Runnable{
         loading = new Loading(this, renderer);
 
         hud = new HUD();
-        spawner = new Spawner(renderer, hud);
-
     }
 
     public static GameObject PLAYER = null;
@@ -113,33 +114,6 @@ public class Game extends Canvas implements Runnable{
                 .getAsInt();
     }
 
-    /*
-    public static GameObject PLAYER = null;
-    public void getPlayer() {
-        for (int i = 0; i < renderer.objects.size(); i++) {
-            if (renderer.objects.get(i).getId() == ID.Player) {
-                PLAYER = renderer.objects.get(i);
-                break;
-            }
-        }
-    }
-
-     */
-
-    /*
-    public void renderDistance(){
-        GameObject checkObject = new GameObject();
-        for(i = 0; i > objects.length; i++){
-            if (renderer.objects.get(i).getId() == ID.Enemy || renderer.objects.get(i).getId() == ID.Projectile){
-                checkObject = renderer.objects.get(i);
-                if(checkObject.getX() > camera.getX() || checkObject.getY() > camera.getY()){
-                    renderer.removeObject(checkObject);
-                }
-            }
-        }
-    }
-    */
-
     public synchronized void start() {
         thread = new Thread(this);
         thread.start();
@@ -175,7 +149,7 @@ public class Game extends Canvas implements Runnable{
                 tick();
                 render();
                 frames++;
-                accumulatedFrameTime--;
+                accumulatedFrameTime = 0;
             }
 
             if(System.currentTimeMillis() - timer > 1000){
@@ -274,14 +248,12 @@ public class Game extends Canvas implements Runnable{
         if(!paused) {
             if (windowSTATE == STATE.Game) {
                 //hud.tick();
-                spawner.tick();
                 renderer.tick();
                 for(int i = 0; i < renderer.objects.size(); i++) {
                     if (renderer.objects.get(i).getId() == ID.Player) {
                         camera.tick(renderer.objects.get(i));
                     }
                 }
-
             }
             if (windowSTATE == STATE.Menu || windowSTATE == STATE.Info || windowSTATE == STATE.ModeSelect|| windowSTATE == STATE.MultiplayerSelect) {
                 ui.tick();
@@ -314,7 +286,6 @@ public class Game extends Canvas implements Runnable{
 
         graphics.setColor(Color.black);
         graphics.fillRect(0, 0, WIDTH, HEIGHT);
-        //graphics.drawImage(background, WIDTH, HEIGHT, null);
 
         if(!paused) {
             if (windowSTATE == STATE.Game) {
@@ -376,12 +347,12 @@ public class Game extends Canvas implements Runnable{
                 }
                 //Enemies
                 if(red == 255 && green == 0 && blue == 0){
-                    renderer.addObject(new Enemy(xx * 32, yy * 32, 100, ID.Enemy, renderer));
+                    //renderer.addObject(new Enemy(xx * 32, yy * 32, 100, ID.Enemy, renderer));
                 }
                 //Background
 
                 if(red == 0){
-                    renderer.addBackground( new Background(xx * 32, yy * 32, 100, ID.Background));
+                    //renderer.addBackground( new Background(xx * 32, yy * 32, 100, ID.Background));
                 }
 
             }

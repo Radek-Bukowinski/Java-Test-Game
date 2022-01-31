@@ -3,7 +3,6 @@ package com.project.game.main;
 import com.project.game.identifiers.DIRECTION;
 import com.project.game.identifiers.ID;
 import com.project.game.identifiers.STATE;
-import com.project.game.objects.Enemy;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -73,14 +72,10 @@ public class KeyInput extends KeyAdapter {
             HUD.health -= 10;
         }
 
-        if(key == KeyEvent.VK_X){
-            if(temporaryObject != null){
-                renderer.addObject(new Enemy(temporaryObject.getX() + 5, temporaryObject.getY(), 100, ID.Enemy, renderer));
-            }else{
-                findPlayer();
-            }
-
+        if(key == KeyEvent.VK_L) {
+            System.out.println(renderer.enemies.size());
         }
+
 
         for(int i = 0; i < renderer.objects.size(); i++)
         {
