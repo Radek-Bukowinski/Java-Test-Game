@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.Random;
 
+import static com.project.game.main.Spawner.enemyCount;
+
 public class Player extends GameObject {
     private RendererHandler renderer;
     private Random random = new Random();
@@ -37,7 +39,25 @@ public class Player extends GameObject {
 
         collision();
         isAlive();
+        spawn();
+    }
 
+    private void spawn() {
+        if (renderer.enemies.size() < 5) {
+            int chosen = Game.getRandomNumber(1, 4);
+            if(chosen == 1){
+                renderer.addEnemy(new Enemy(this.x + 128, this.y, 100, ID.Enemy, renderer, enemyCount, true));
+            }
+            if(chosen == 2){
+                renderer.addEnemy(new Enemy(this.x - 128, this.y, 100, ID.Enemy, renderer, enemyCount, true));
+            }
+            if(chosen == 3){
+                renderer.addEnemy(new Enemy(this.x, this.y + 128, 100, ID.Enemy, renderer, enemyCount, true));
+            }
+            if(chosen == 4){
+                renderer.addEnemy(new Enemy(this.x + 128, this.y - 128, 100, ID.Enemy, renderer, enemyCount, true));
+            }
+        }
     }
 
     private void collision() {

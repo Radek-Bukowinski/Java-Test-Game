@@ -113,6 +113,11 @@ public class Game extends Canvas implements Runnable{
                 .getAsInt();
     }
 
+    public static int getRandomIntFromArray(int[] array) {
+        int random = new Random().nextInt(array.length);
+        return array[random];
+    }
+
     public synchronized void start() {
         thread = new Thread(this);
         thread.start();
@@ -333,7 +338,7 @@ public class Game extends Canvas implements Runnable{
                 }
 
                 //Gray walls as well, but these are out of bounds, and therefore we do not need to worry about assigning collision to them.
-                if(blue == 128){
+                if(red == 255 && blue == 110){
                     renderer.addObject(new Block(xx * 32, yy * 32, 100, ID.Block, false));
                 }
 

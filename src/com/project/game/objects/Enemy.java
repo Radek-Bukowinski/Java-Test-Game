@@ -49,12 +49,14 @@ public class Enemy extends GameObject {
         }
     }
 
+    int[] possibleVelocities = {-1, 1};
+
     public Enemy(float x, float y, int health, ID id, RendererHandler renderer, int uid, boolean isCollidible) {
         super(x, y, health, id, isCollidible);
         this.renderer = renderer;
         this.uid = uid;
-        velocityY = Game.getRandomNumber(-1, 1);
-        velocityX = Game.getRandomNumber(-1, 1);
+        velocityY = Game.getRandomIntFromArray(possibleVelocities);
+        velocityX = Game.getRandomIntFromArray(possibleVelocities);
         bufferedImage = bufferedImageLoader.loadImage("/enemy.png");
     }
 
