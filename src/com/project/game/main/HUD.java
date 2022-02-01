@@ -4,40 +4,18 @@ import java.awt.*;
 
 public class HUD {
     public static int health = 100;
-
     private int colorValue = 255;
-
     public static int score = 0;
-
-    public int getLevel() { return level; }
-
-    public void setLevel(int level) { this.level = level; }
-
     static int level = 1;
-
     private String version = "Alpha 0.0.5";
 
-    public void tick()
-    {
+    public void tick(){
         health = Game.constrain(health, 0, 100);
-
         colorValue = Game.constrain(colorValue, 0, 255);
-
         colorValue = health * 2;
-
-        //score++;
-
-        // This will check everytime score increases by 1000, it will increase the level
-        /*
-        if(score % 1000 == 0){
-            level++;
-        }
-        */
-
     }
 
-    public void render(Graphics graphics)
-    {
+    public void render(Graphics graphics) {
         graphics.setColor(Color.gray);
         graphics.fillRect(15,15,300,25);
 
@@ -53,7 +31,5 @@ public class HUD {
         graphics.drawString("Level: " + level, 15, 675);
 
         graphics.drawString("Version: " + version, 1150, 675);
-
-        //graphics.drawString("FPS: " + Game.getFrames(), 1210, 15);
     }
 }

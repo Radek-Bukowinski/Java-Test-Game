@@ -13,8 +13,8 @@ public class Health extends GameObject {
         private BufferedImage bufferedImage;
 
 
-        public Health(float x, float y, int health, ID id) {
-            super(x, y, health, id);
+        public Health(float x, float y, int health, ID id, boolean isCollidible) {
+            super(x, y, health, id, isCollidible);
             bufferedImage = bufferedImageLoader.loadImage("/health.png");
         }
 

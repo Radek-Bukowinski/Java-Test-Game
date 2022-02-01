@@ -21,8 +21,8 @@ public class Player extends GameObject {
     private HUD hud;
     private ClientSideConnection clientSideConnection;
 
-    public Player(int x, int y, int health, ID id, RendererHandler renderer, Game game) {
-        super(x, y, health, id);
+    public Player(int x, int y, int health, ID id, RendererHandler renderer, Game game, boolean isCollidible) {
+        super(x, y, health, id, isCollidible);
         this.renderer = renderer;
         this.game = game;
         bufferedImage = bufferedImageLoader.loadImage("/sprite.png");
@@ -39,10 +39,6 @@ public class Player extends GameObject {
         isAlive();
 
     }
-
-
-
-
 
     private void collision() {
             for (int i = 0; i < renderer.collidibles.size(); i++) {
@@ -75,20 +71,22 @@ public class Player extends GameObject {
 
 
         for (int i = 0; i < renderer.objects.size(); i++) {
-            GameObject temporaryObject = renderer.objects.get(i);
-            if (renderer.objects.get(i).getId() == ID.Coin) {
-                if (this.getBounds().intersects(temporaryObject.getBounds())) {
-                    renderer.removeObject(temporaryObject);
-                    hud.score += 100;
-                }
+            if(i > renderer.objects.size() - 1) {
+                GameObject temporaryObject = renderer.objects.get(i);
+                if (renderer.objects.get(i).getId() == ID.Coin) {
+                    if (this.getBounds().intersects(temporaryObject.getBounds())) {
+                        renderer.removeObject(temporaryObject);
+                        hud.score += 100;
+                    }
 
-            }
-            if (renderer.objects.get(i).getId() == ID.Health) {
-                if (this.getBounds().intersects(temporaryObject.getBounds())) {
-                    renderer.removeObject(temporaryObject);
-                    hud.health += 10;
                 }
+                if (renderer.objects.get(i).getId() == ID.Health) {
+                    if (this.getBounds().intersects(temporaryObject.getBounds())) {
+                        renderer.removeObject(temporaryObject);
+                        hud.health += 10;
+                    }
 
+                }
             }
         }
 

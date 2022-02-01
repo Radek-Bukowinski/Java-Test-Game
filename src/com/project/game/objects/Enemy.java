@@ -49,8 +49,8 @@ public class Enemy extends GameObject {
         }
     }
 
-    public Enemy(float x, float y, int health, ID id, RendererHandler renderer, int uid) {
-        super(x, y, health, id);
+    public Enemy(float x, float y, int health, ID id, RendererHandler renderer, int uid, boolean isCollidible) {
+        super(x, y, health, id, isCollidible);
         this.renderer = renderer;
         this.uid = uid;
         velocityY = Game.getRandomNumber(-1, 1);

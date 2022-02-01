@@ -12,8 +12,8 @@ public class Coin extends GameObject {
     private BufferedImageLoader bufferedImageLoader = new BufferedImageLoader();
     private BufferedImage bufferedImage;
 
-    public Coin(float x, float y, int health, ID id) {
-        super(x, y, health, id);
+    public Coin(float x, float y, int health, ID id, boolean isCollidible) {
+        super(x, y, health, id, isCollidible);
         bufferedImage = bufferedImageLoader.loadImage("/coin.png");
     }
 

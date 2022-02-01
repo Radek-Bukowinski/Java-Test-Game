@@ -1,6 +1,7 @@
 package com.project.game.objects;
 
 import com.project.game.identifiers.ID;
+import com.project.game.main.Game;
 import com.project.game.main.GameObject;
 import com.project.game.main.HUD;
 import com.project.game.main.RendererHandler;
@@ -44,26 +45,15 @@ public class Projectile extends GameObject {
 
 
 
-    public Projectile(float x, float y, int health, ID id, RendererHandler renderer) {
-        super(x, y, health, id);
+    public Projectile(float x, float y, int health, ID id, RendererHandler renderer, boolean isCollidible) {
+        super(x, y, health, id, isCollidible);
         this.renderer = renderer;
     }
 
     @Override
     public void tick() {
-        /*
-        if(PLAYER != null) {
-            x += (velocityX + PLAYER.getVelocityX());
-            y += (velocityY + PLAYER.getVelocityY());
-        }else{
-            getPlayer();
-        }
-
-         */
-
         x += velocityX;
         y += velocityY;
-
 
         collision();
     }
@@ -71,35 +61,20 @@ public class Projectile extends GameObject {
     private void collision() {
         for (int i = 0; i < renderer.enemies.size(); i++) {
             Enemy temporaryObject = (Enemy) renderer.enemies.get(i);
-                if (getBounds().intersects(temporaryObject.getBounds())) {
-                    renderer.removeEnemy(temporaryObject);
-                    //Spawner.enemyCount--;
-                    hud.score += 100;
-                }
-
-
-
-            /*
-            if(temporaryObject.getId() != ID.Player) {
-                if (getBounds().intersects(temporaryObject.getBounds())) {
-                    renderer.removeObject(temporaryObject);
-                    if (temporaryObject.getId() == ID.Enemy) {
-                        hud.score += 100;
-                    }
-                }
+            if (getBounds().intersects(temporaryObject.getBounds())) {
+                renderer.removeEnemy(temporaryObject);
+                hud.score += 100;
             }
-
-             */
-
-
-            if (temporaryObject.getId() == ID.Crate || temporaryObject.getId() == ID.Block) {
-                if (getBounds().intersects(temporaryObject.getBounds())) {
+        }
+        for (int x  = 0; x < renderer.collidibles.size(); x++) {
+            GameObject temporaryObject2 = renderer.collidibles.get(x);
+            if (temporaryObject2.getId() == ID.Crate || temporaryObject2.getId() == ID.Block) {
+                if (getBounds().intersects(temporaryObject2.getBounds())) {
                     renderer.removeObject(this);
                 }
             }
-
-
         }
+
     }
 
     @Override

@@ -12,8 +12,8 @@ public class Background extends GameObject {
     private BufferedImageLoader bufferedImageLoader = new BufferedImageLoader();
     private BufferedImage bufferedImage;
 
-    public Background(float x, float y, int health, ID id) {
-        super(x, y, health, id);
+    public Background(float x, float y, int health, ID id, boolean isCollidible) {
+        super(x, y, health, id, isCollidible);
         //bufferedImage = bufferedImageLoader.loadImage("/background.png");
     }
 

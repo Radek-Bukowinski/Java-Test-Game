@@ -99,7 +99,6 @@ public class Game extends Canvas implements Runnable{
         BufferedImageLoader bufferedImageLoader = new BufferedImageLoader();
         level = bufferedImageLoader.loadImage(path);
         loadLevel(level);
-        //isInitialised = true;
     }
 
     public void loadBackground(){
@@ -328,22 +327,28 @@ public class Game extends Canvas implements Runnable{
 
                 // Gray walls
                 if(red == 128 && green == 128 && blue == 128){
-                    renderer.addObject(new Block(xx * 32, yy * 32, 100, ID.Block));
-                    renderer.addCollidible(new Block(xx * 32, yy * 32, 100, ID.Block));
+                    renderer.addObject(new Block(xx * 32, yy * 32, 100, ID.Block, true));
+                    renderer.addCollidible(new Block(xx * 32, yy * 32, 100, ID.Block, true));
 
                 }
+
+                //Gray walls as well, but these are out of bounds, and therefore we do not need to worry about assigning collision to them.
+                if(blue == 128){
+                    renderer.addObject(new Block(xx * 32, yy * 32, 100, ID.Block, false));
+                }
+
                 // Brown crates
                 if(red == 127 && green == 51 && blue == 0){
-                    renderer.addObject(new Crate(xx * 32, yy * 32, 100, ID.Crate));
-                    renderer.addCollidible(new Crate(xx * 32, yy * 32, 100, ID.Crate));
+                    renderer.addObject(new Crate(xx * 32, yy * 32, 100, ID.Crate, true));
+                    renderer.addCollidible(new Crate(xx * 32, yy * 32, 100, ID.Crate, true));
                 }
                 //Coin
                 if(red == 255 && green == 216 && blue == 0){
-                    renderer.addObject(new Coin(xx * 32, yy * 32, 100, ID.Coin));
+                    renderer.addObject(new Coin(xx * 32, yy * 32, 100, ID.Coin, true));
                 }
                 //Health
                 if(red == 0 && green == 38 && blue == 255){
-                    renderer.addObject(new Health(xx * 32, yy * 32, 100, ID.Health));
+                    renderer.addObject(new Health(xx * 32, yy * 32, 100, ID.Health, true));
                 }
                 //Enemies
                 if(red == 255 && green == 0 && blue == 0){

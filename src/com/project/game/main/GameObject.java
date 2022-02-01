@@ -10,22 +10,14 @@ public abstract class GameObject {
     protected float velocityX, velocityY;
     protected ID id;
     protected int health;
-    protected boolean isRendered;
+    protected boolean isCollidible;
 
-    public Color getObjectColor() {
-        return objectColor;
-    }
-    public void setObjectColor(Color objectColor) {
-        this.objectColor = objectColor;
-    }
-
-    protected Color objectColor;
-
-    public GameObject(float x, float y, int health, ID id) {
+    public GameObject(float x, float y, int health, ID id, boolean isCollidible) {
         this.x = x;
         this.y = y;
         this.health = health;
         this.id = id;
+        this.isCollidible = isCollidible;
     }
 
     public abstract void tick();
@@ -49,4 +41,12 @@ public abstract class GameObject {
 
     public int getHealth() { return health; }
     public void setHealth(int health) { this.health = health; }
+
+    public boolean isCollidible() {
+        return isCollidible;
+    }
+
+    public void setCollidible(boolean collidible) {
+        isCollidible = collidible;
+    }
 }

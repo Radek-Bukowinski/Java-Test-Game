@@ -16,8 +16,8 @@ public class Spawner extends GameObject{
 
     private int uid;
 
-    public Spawner(int x, int y, int health, ID id, RendererHandler renderer, int uid) {
-        super(x, y, health, id);
+    public Spawner(int x, int y, int health, ID id, RendererHandler renderer, int uid, boolean isCollidible) {
+        super(x, y, health, id, isCollidible);
         this.renderer = renderer;
         this.uid = uid;
     }
@@ -37,14 +37,41 @@ public class Spawner extends GameObject{
         }
     }
 
-
     private void spawn(){
-        if(renderer.enemies.size() < 4) {
+        int xToSpawnAt = 0;
+        int yToSpawnAt = 0;
+        if(renderer.enemies.size() < 2) {
             int chosen = Game.getRandomNumber(1, 4);
             for (int q = 0; q < renderer.spawners.size(); q++) {
                 Spawner spawnerToUse = (Spawner) renderer.spawners.get(q);
                 if (spawnerToUse.uid == chosen) {
-                    renderer.addEnemy(new Enemy(spawnerToUse.getX(), spawnerToUse.getY(), 100, ID.Enemy, renderer, enemyCount));
+                    // Must determine direction where the enemy will spawn.
+                    // Each spawner has a unique identifier, based on this we can tell where it should spawn.
+                    // Spawn decided relative to the player.
+                    // 1 is right
+                    // 2 is left
+                    // 3 is up
+                    // 4 is down
+
+                    if(spawnerToUse.uid == 1){
+                        xToSpawnAt = (int) ((int) Loading.playerObject.x + (spawnerToUse.x - Loading.playerObject.x));
+                        yToSpawnAt = (int) Loading.playerObject.y;
+                    }
+                    if(spawnerToUse.uid == 2){
+                        xToSpawnAt = (int) ((int) Loading.playerObject.x - (spawnerToUse.x - Loading.playerObject.x));
+                        yToSpawnAt = (int) Loading.playerObject.y;
+                    }
+
+                    if(spawnerToUse.uid == 3){
+                        xToSpawnAt = (int) Loading.playerObject.x;
+                        yToSpawnAt = (int) ((int) Loading.playerObject.y + (spawnerToUse.y - Loading.playerObject.y));
+                    }
+                    if(spawnerToUse.uid == 4){
+                        xToSpawnAt = (int) Loading.playerObject.x;
+                        yToSpawnAt = (int) ((int) Loading.playerObject.y - (spawnerToUse.y - Loading.playerObject.y));
+                    }
+
+                    renderer.addEnemy(new Enemy(xToSpawnAt, yToSpawnAt, 100, ID.Enemy, renderer, enemyCount, true));
                 }
             }
         }
@@ -63,6 +90,8 @@ public class Spawner extends GameObject{
         //graphics.setColor(Color.gray);
         //graphics.fillRect((int)x, (int)y, 32, 32);
     }
+
+
 
     @Override
     public Rectangle getBounds() {

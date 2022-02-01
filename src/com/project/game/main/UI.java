@@ -72,7 +72,7 @@ public class UI extends MouseAdapter {
     ScheduledFuture<?> shootHandle;
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private void shootProjectile(int mouseX, int mouseY){
-        GameObject temporaryProjectile = renderer.addObject(new Projectile(temporaryObject.x + 16, temporaryObject.y + 16, 100, ID.Projectile, renderer));
+        GameObject temporaryProjectile = renderer.addObject(new Projectile(temporaryObject.x + 16, temporaryObject.y + 16, 100, ID.Projectile, renderer, false));
         float angle = (float) Math.atan2(mouseY - temporaryObject.y, mouseX - temporaryObject.x);
         int projectileVelocity = 5;
         temporaryProjectile.velocityX = (float) ((projectileVelocity) * Math.cos(angle));
@@ -190,7 +190,7 @@ public class UI extends MouseAdapter {
                 HUD.level = 1;
                 HUD.score = 0;
 
-                renderer.addObject(new Player(Game.WIDTH / 2 - 32, Game.HEIGHT / 2 - 32, 100, ID.Player, renderer, game));
+                //renderer.addObject(new Player(Game.WIDTH / 2 - 32, Game.HEIGHT / 2 - 32, 100, ID.Player, renderer, game));
                 //renderer.addObject(new Enemy(random.nextInt(Game.WIDTH) - 100, random.nextInt(Game.HEIGHT) - 100, 100, ID.Enemy, renderer));
                 //renderer.addObject(new Enemy(random.nextInt(Game.WIDTH) - 100, random.nextInt(Game.HEIGHT) - 100, 100, ID.Enemy, renderer));
             }
