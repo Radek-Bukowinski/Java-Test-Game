@@ -91,7 +91,6 @@ public class Player extends GameObject {
 
 
         for (int i = 0; i < renderer.objects.size(); i++) {
-            if(i > renderer.objects.size() - 1) {
                 GameObject temporaryObject = renderer.objects.get(i);
                 if (renderer.objects.get(i).getId() == ID.Coin) {
                     if (this.getBounds().intersects(temporaryObject.getBounds())) {
@@ -108,7 +107,7 @@ public class Player extends GameObject {
 
                 }
             }
-        }
+
 
         /*
         if(game.windowSTATE == STATE.Game) {
