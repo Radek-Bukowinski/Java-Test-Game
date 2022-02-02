@@ -62,10 +62,10 @@ public class Player extends GameObject {
 
     private void collision() {
             for (int i = 0; i < renderer.collidibles.size(); i++) {
+                // Search through objects that are collidible (solid objects only)
                 GameObject temporaryObject = renderer.collidibles.get(i);
-                if (temporaryObject.getId() == ID.Block || temporaryObject.getId() == ID.Crate) {
                     if (this.getBounds().intersects(temporaryObject.getBounds())) {
-                        System.out.println("collision detected");
+                        //System.out.println("collision detected");
                         if (horizontalCollision().intersects(temporaryObject.getBounds())) {
                             if (velocityX > 0) {
                                 velocityX = 0;
@@ -86,7 +86,6 @@ public class Player extends GameObject {
                             }
                         }
                     }
-                }
             }
 
 
