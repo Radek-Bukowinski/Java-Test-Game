@@ -14,6 +14,8 @@ public class Loading {
     private int ticks;
     private Random random = new Random();
     private String loadingString = "Loading";
+    private String informationString = "Shoot enemies and collect coins to win!";
+    private String multiplayerStateString = "";
     private Color white = Color.white;
 
     public static GameObject playerObject;
@@ -22,6 +24,8 @@ public class Loading {
     {
         this.game = game;
         this.renderer = renderer;
+        playerObject = new Player(Game.WIDTH / 2 - 32, Game.HEIGHT / 2 - 32, 100, ID.Player, renderer, game , true);
+
 
     }
 
@@ -46,14 +50,15 @@ public class Loading {
             if(Math.floor(progressLevel / 100) == 3) {
                 loadingString = "Loading...";
             }
-                
         }
 
         if(progressLevel == 1100) {
             game.windowSTATE = STATE.Game;
             game.initialiseLevel(game.currentLevel);
-            playerObject = renderer.addObject(new Player(Game.WIDTH / 2 - 32, Game.HEIGHT / 2 - 32, 100, ID.Player, renderer, game , true));
+            renderer.addObject(playerObject);
 
+
+            /*
             renderer.addObject(new Spawner((int) (playerObject.getX() + 64), (int) (playerObject.getY()), 100, ID.Spawner, renderer, 1, true));
             renderer.addSpawner(new Spawner((int) (playerObject.getX() + 64), (int) (playerObject.getY()), 100, ID.Spawner, renderer, 1, true));
 
@@ -67,7 +72,7 @@ public class Loading {
 
             renderer.addObject(new Spawner((int) (playerObject.getX()), (int) (playerObject.getY() - 64), 100, ID.Spawner, renderer, 4, true));
             renderer.addSpawner(new Spawner((int) (playerObject.getX()), (int) (playerObject.getY() - 64), 100, ID.Spawner, renderer, 4, true));
-
+            */
 
             //renderer.addObject(new Enemy(random.nextInt(Game.WIDTH) - 100, random.nextInt(Game.HEIGHT) - 100, 100, ID.Enemy, renderer));
             //renderer.addObject(new Enemy(random.nextInt(Game.WIDTH) - 100, random.nextInt(Game.HEIGHT) - 100, 100, ID.Enemy, renderer));
@@ -82,11 +87,22 @@ public class Loading {
         graphics.setFont(font);
         graphics.drawString(loadingString, 570, 300);
 
+        graphics.drawString(informationString, 500, 400);
+        graphics.drawString(multiplayerStateString, 500, 450);
+
         graphics.setColor(Color.gray);
         graphics.fillRect(80, 640, 1100, 20);
 
         graphics.setColor(white);
         graphics.drawRect(80, 640, 1100, 20);
         graphics.fillRect(80, 640, progressLevel, 20);
+    }
+
+    public String getMultiplayerStateString() {
+        return multiplayerStateString;
+    }
+
+    public void setMultiplayerStateString(String multiplayerStateString) {
+        this.multiplayerStateString = multiplayerStateString;
     }
 }

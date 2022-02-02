@@ -28,17 +28,15 @@ public class UI extends MouseAdapter {
     private Game game;
     private RendererHandler renderer;
     private Camera camera;
-    private Random random = new Random();
+    private Loading loading;
 
     Font font = new Font("Arial", 1, 20);
-
     Font largeFont = new Font("Arial", 1, 40);
 
     private Color startButtonColor = Color.white;
     private Color infoButtonColor = Color.white;
     private Color exitButtonColor = Color.white;
     private Color backButtonColor = Color.white;
-
 
     public UI(Game game, RendererHandler renderer, Camera camera) {
         this.game = game;
@@ -65,20 +63,19 @@ public class UI extends MouseAdapter {
 
     ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
-
     /*
         Below: Function for shooting mechanic
     */
     ScheduledFuture<?> shootHandle;
+    // We use a scheduler as this allows us to set an event that happens in the future.
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private void shootProjectile(int mouseX, int mouseY){
         GameObject temporaryProjectile = renderer.addObject(new Projectile(temporaryObject.x + 16, temporaryObject.y + 16, 100, ID.Projectile, renderer, false));
+        // Work out the angle between mouse and the player.
         float angle = (float) Math.atan2(mouseY - temporaryObject.y, mouseX - temporaryObject.x);
         int projectileVelocity = 5;
         temporaryProjectile.velocityX = (float) ((projectileVelocity) * Math.cos(angle));
         temporaryProjectile.velocityY = (float) ((projectileVelocity) * Math.sin(angle));
-
-
     }
     /*
         End of shooting mechanic
@@ -93,13 +90,12 @@ public class UI extends MouseAdapter {
         int realMouseX = (int) event.getX();
         int realMouseY  = (int) event.getY();
 
-        System.out.println("mouse pressed");
         if(game.windowSTATE == STATE.Game) {
-            System.out.println("execute true");
             if (temporaryObject != null) {
+                // This calls the shoot function
                 Runnable shoot = () -> shootProjectile(mouseX, mouseY);
+                // We keep calling the shoot function, because the mouse is held down
                 shootHandle = scheduler.scheduleAtFixedRate(shoot, 0, 800, TimeUnit.MILLISECONDS);
-                System.out.println("shot handled");
             } else {
                 findPlayer();
             }
@@ -110,31 +106,14 @@ public class UI extends MouseAdapter {
             //singleplayer button
             if (mouseOver(realMouseX, realMouseY, 340, 325, 200, 40)) {
                 game.windowSTATE = STATE.Loading;
-                /*
-                game.windowSTATE = STATE.Game;
-                game.initialiseLevel(game.currentLevel);
-                renderer.addObject(new Player(Game.WIDTH / 2 - 32, Game.HEIGHT / 2 - 32, 100, ID.Player, renderer, game));
-                game.isInitialised = true;
-
-                 */
             }
 
 
             //multiplayer button
             if (mouseOver(realMouseX, realMouseY, 740, 325, 200, 40)) {
                 Runnable callUpdateState = () -> updateState(STATE.MultiplayerSelect);
-                //executorService.scheduleWithFixedDelay(callUpdateState, 0, 1, TimeUnit.MILLISECONDS);
                 executorService.schedule(callUpdateState, 1, TimeUnit.MILLISECONDS);
-                //game.gameMODE = MODE.Multiplayer;
-                //game.windowSTATE = MultiplayerSelect;
 
-                /*
-                try {
-                    Thread.currentThread().wait(1);
-                } catch (InterruptedException interruptedException) {
-                    interruptedException.printStackTrace();
-                }
-                */
             }
             //back button
             if(mouseOver(realMouseX, realMouseY, 540, 625, 200, 40)) {
@@ -142,14 +121,15 @@ public class UI extends MouseAdapter {
             }
         }
 
-        if(game.windowSTATE == MultiplayerSelect) {
+        if(game.windowSTATE == STATE.MultiplayerSelect) {
             resetButtonColors();
-            //host button
+            // Create a new multiplayer session - players will be allowed to join for co-op mode.
             if (mouseOver(realMouseX, realMouseY, 340, 325, 200, 40)) {
                 game.windowSTATE = STATE.MultiplayerHost;
+
             }
 
-            //join button
+            // Join a multiplayer session - joins an already existing multiplayer session
             if (mouseOver(realMouseX, realMouseY, 740, 325, 200, 40)) {
                 game.windowSTATE = STATE.MultiplayerJoin;
             }
@@ -157,6 +137,21 @@ public class UI extends MouseAdapter {
             if(mouseOver(realMouseX, realMouseY, 540, 625, 200, 40)) {
                 game.windowSTATE = STATE.ModeSelect;
             }
+        }
+
+        if(game.windowSTATE == STATE.MultiplayerHost){
+            game.initialiseMultiplayer();
+            loading.setMultiplayerStateString("Server has been created...");
+            game.windowSTATE = STATE.Loading;
+            game.multiplayerEnabled = true;
+        }
+
+        if(game.windowSTATE == STATE.MultiplayerJoin){
+            Player temporaryPlayer = (Player) Loading.playerObject;
+            temporaryPlayer.connectToServer();
+            loading.setMultiplayerStateString("Player connected to server...");
+            game.windowSTATE = STATE.Loading;
+            game.multiplayerEnabled = true;
         }
 
 
@@ -169,7 +164,6 @@ public class UI extends MouseAdapter {
             if (mouseOver(realMouseX, realMouseY, 540, 375, 200, 40)) {
                 game.windowSTATE = STATE.Info;
             }
-
             if (mouseOver(realMouseX, realMouseY, 540, 435, 200, 40)) {
                 System.exit(0);
             }
@@ -184,15 +178,11 @@ public class UI extends MouseAdapter {
 
         if(game.windowSTATE ==  STATE.Death) {
             if(mouseOver(realMouseX, realMouseY,540, 315, 200, 50)) {
-                game.windowSTATE = STATE.Game;
+                game.windowSTATE = STATE.Loading;
 
                 HUD.health = 100;
                 HUD.level = 1;
                 HUD.score = 0;
-
-                //renderer.addObject(new Player(Game.WIDTH / 2 - 32, Game.HEIGHT / 2 - 32, 100, ID.Player, renderer, game));
-                //renderer.addObject(new Enemy(random.nextInt(Game.WIDTH) - 100, random.nextInt(Game.HEIGHT) - 100, 100, ID.Enemy, renderer));
-                //renderer.addObject(new Enemy(random.nextInt(Game.WIDTH) - 100, random.nextInt(Game.HEIGHT) - 100, 100, ID.Enemy, renderer));
             }
             if(mouseOver(realMouseX, realMouseY, 540, 375, 200, 50)) {
                 System.exit(0);
@@ -299,15 +289,20 @@ public class UI extends MouseAdapter {
 
 
     @Override
-    public void mouseReleased(MouseEvent event) throws NullPointerException{
+    public void mouseReleased(MouseEvent event){
         super.mouseReleased(event);
-        System.out.println("mouse released");
         if(game.windowSTATE == STATE.Game) {
-            Runnable canceller = () -> shootHandle.cancel(true);
-            scheduler.schedule(canceller, 0, TimeUnit.MILLISECONDS);
+            // Cancel the shoot event, as the mouse has been released.
+            try {
+                Runnable canceller = () -> shootHandle.cancel(true);
+                scheduler.schedule(canceller, 0, TimeUnit.MILLISECONDS);
+            } catch (NullPointerException nullPointerException){
+                nullPointerException.printStackTrace();
+            }
         }
     }
 
+    // We can use this function to determine if the mouse is within bounds of a button
     public boolean mouseOver(int mouseX, int mouseY, int x, int y, int width, int height) {
         if(mouseX > x && mouseX < x + width) {
             if(mouseY > y && mouseY < y + height) {
@@ -319,8 +314,6 @@ public class UI extends MouseAdapter {
     public void tick() { }
 
     public void render(Graphics graphics) {
-
-        
         if(game.windowSTATE == STATE.Menu) {
             graphics.setColor(Color.white);
 
@@ -349,11 +342,6 @@ public class UI extends MouseAdapter {
         }
 
         else if(game.windowSTATE == STATE.ModeSelect){
-                
-                /*
-                removeAll();
-        repaint(); 
-                */
             graphics.setFont(font);
             graphics.setColor(startButtonColor);
             graphics.drawRect(340, 325, 200, 40);
@@ -404,10 +392,8 @@ public class UI extends MouseAdapter {
             graphics.drawString("Back", 617, 651);
         }
 
-        else if(game.windowSTATE == STATE.Death)
-        {
-            for(int i = 0; i < renderer.objects.size(); i++)
-            {
+        else if(game.windowSTATE == STATE.Death) {
+            for(int i = 0; i < renderer.objects.size(); i++) {
                 GameObject temporaryObject = renderer.objects.get(i);
                 renderer.removeObject(temporaryObject);
             }

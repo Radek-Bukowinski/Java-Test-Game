@@ -105,6 +105,7 @@ public class Player extends GameObject {
 
 
         for (int i = 0; i < renderer.objects.size(); i++) {
+            if(i < renderer.objects.size() - 1) {
                 GameObject temporaryObject = renderer.objects.get(i);
                 if (renderer.objects.get(i).getId() == ID.Coin) {
                     //If the player has collided with a coin, remove it from being rendered, and add 100 to the players score.
@@ -118,14 +119,15 @@ public class Player extends GameObject {
                     //If the player has collided with a health pack, remove it from being rendered, and add 10 health to the player.
                     if (this.getBounds().intersects(temporaryObject.getBounds())) {
                         renderer.removeObject(temporaryObject);
-                        if(hud.health == 100){
+                        if (hud.health == 100) {
                             return;
-                        }else {
+                        } else {
                             hud.health += 10;
                         }
                     }
 
                 }
+            }
         }
     }
 
@@ -161,7 +163,10 @@ public class Player extends GameObject {
         // This is not used for hosting, only for connecting to servers.
         clientSideConnection = new ClientSideConnection();
     }
-    
+
+    public void playerDisconnect(){
+        clientSideConnection.disconnect();
+    }
     private class ClientSideConnection{
         private Socket socket;
         private DataInputStream dataInputStream;
@@ -175,6 +180,14 @@ public class Player extends GameObject {
             } catch(IOException ioException){
                 ioException.printStackTrace();
               }
+        }
+
+        public void disconnect() {
+            try {
+                socket.close();
+            } catch (IOException ioException){
+                ioException.printStackTrace();
+            }
         }
     }
 

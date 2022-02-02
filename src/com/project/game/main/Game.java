@@ -3,10 +3,7 @@ package com.project.game.main;
 import com.project.game.identifiers.ID;
 import com.project.game.identifiers.STATE;
 import com.project.game.network.GameServer;
-import com.project.game.objects.Block;
-import com.project.game.objects.Coin;
-import com.project.game.objects.Crate;
-import com.project.game.objects.Health;
+import com.project.game.objects.*;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
@@ -49,6 +46,8 @@ public class Game extends Canvas implements Runnable{
 
     public boolean DEBUG = false;
 
+    public boolean multiplayerEnabled = false;
+
     Timer timer;
 
     //Runner runner = new Runner();
@@ -67,7 +66,6 @@ public class Game extends Canvas implements Runnable{
         this.addMouseMotionListener(ui);
 
 
-
         new Window(WIDTH, HEIGHT, "Game", this);
         loadBackground();
         loading = new Loading(this, renderer);
@@ -75,26 +73,13 @@ public class Game extends Canvas implements Runnable{
         hud = new HUD();
     }
 
-    public static GameObject PLAYER = null;
-    public GameObject getPLAYER() {
-        if (isInitialised == true) {
-            for (int i = 0; i < renderer.objects.size(); i++) {
-                if (renderer.objects.get(i).getId() == ID.Player) {
-                    PLAYER = renderer.objects.get(i);
-                    return PLAYER;
-                }
-            }
-        } else {
-            return null;
-        }
-        return null;
-    }
-
+    // Create a new server
     public void initialiseMultiplayer(){
         gameServer = new GameServer();
-        gameServer.acceptConnection();
+        gameServer.acceptConnections();
     }
 
+    // Here we load an image, and the call loadLevel to interpret pixels as objects within the game.
     public void initialiseLevel(String path){
         BufferedImageLoader bufferedImageLoader = new BufferedImageLoader();
         level = bufferedImageLoader.loadImage(path);
@@ -136,8 +121,6 @@ public class Game extends Canvas implements Runnable{
     @Override
     public void run() {
         this.requestFocus();
-        //timer = new Timer();
-        //timer.schedule(runner, 0, 17);
         long lastTime = System.nanoTime();
         double tps = 60.0;
         double ns = 1000000000 / tps;
@@ -162,91 +145,7 @@ public class Game extends Canvas implements Runnable{
                 frames = 0;
             }
         }
-        //stop();
     }
-
-    /*
-
-    class Runner extends TimerTask {
-
-        public void run() {
-            tick();
-            render();
-            if (!running) {
-                timer.cancel();
-            }
-        }
-    }
-
-     */
-
-    /*
-    public void run() {
-        this.requestFocus();
-
-
-            Here we set the amount of ticks, or the amount of times the game updates every second.w
-            This value is set to 100, ensuring smooth gameplay.
-            By design of the game loop logic, the amount of ticks (updates), is also equal to the fps.
-            We could have a seperate while loop to have fps be unbound from the tickrate, but this is overcomplicated.
-
-
-
-        //test: seperate fps from ticks
-
-        long lastTime = System.nanoTime();
-
-        double amountOfTicks = 60.0;
-        double ns = 1000000000 / amountOfTicks;
-        double accumulatedFrameTime = 0;
-
-        long timer = System.currentTimeMillis();
-
-
-        double amountOfRenders = 30.0;
-        double nsR = 1000000000 / amountOfRenders;
-        double accumulateRenderTime = 0;
-
-        //problem is with renders cummulating? not ticks
-
-        int ticks = 0;
-        int renders = 0;
-
-        while(running){
-            long timeNow = System.nanoTime();
-            accumulatedFrameTime += (timeNow - lastTime) / ns;
-            accumulateRenderTime += (timeNow - lastTime) / nsR;
-
-            lastTime = timeNow;
-            while(accumulatedFrameTime >= 1){
-
-                tick();
-                ticks++;
-                accumulatedFrameTime = 0;
-            }
-            render();
-
-
-
-
-            currentSTATE = windowSTATE;
-            if(currentSTATE != lastSTATE) {
-                System.out.println("STATE changed to " + currentSTATE);
-                lastSTATE = currentSTATE;
-            }
-
-
-            if(System.currentTimeMillis() - timer > 1000){
-                timer += 1000;
-                System.out.println("Ticks per second: " + ticks);
-                //System.out.println("Renders per second: " + renders);
-                ticks = 0;
-            }
-
-        }
-        stop();
-    }
-    */
 
     private void tick() {
         if(!paused) {
@@ -355,20 +254,11 @@ public class Game extends Canvas implements Runnable{
                 if(red == 0 && green == 38 && blue == 255){
                     renderer.addObject(new Health(xx * 32, yy * 32, 100, ID.Health, true));
                 }
-                //Enemies
-                if(red == 255 && green == 0 && blue == 0){
-                    //renderer.addObject(new Enemy(xx * 32, yy * 32, 100, ID.Enemy, renderer));
-                }
-                //Background
-
-                if(red == 0){
-                    //renderer.addBackground( new Background(xx * 32, yy * 32, 100, ID.Background));
-                }
-
             }
         }
     }
 
+    // We can use this t
     public static int constrain(int value, int minimum, int maximum) {
         if(value >= maximum) {
             return value = maximum;
