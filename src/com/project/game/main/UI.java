@@ -141,8 +141,8 @@ public class UI extends MouseAdapter {
 
         if(game.windowSTATE == STATE.MultiplayerHost){
             game.initialiseMultiplayer();
-            loading.setMultiplayerStateString("Server has been created...");
             game.windowSTATE = STATE.Loading;
+            loading.setMultiplayerStateString("Server has been created...");
             game.multiplayerEnabled = true;
         }
 

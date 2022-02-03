@@ -11,6 +11,11 @@ import java.awt.image.BufferedImage;
 import java.util.Random;
 import java.util.Timer;
 
+
+/*
+
+*/
+
 public class Game extends Canvas implements Runnable{
     public static final int WIDTH = 1280, HEIGHT = WIDTH / 16 * 9;
 
@@ -75,7 +80,11 @@ public class Game extends Canvas implements Runnable{
 
     // Create a new server
     public void initialiseMultiplayer(){
-        gameServer = new GameServer();
+        GameServer gameServer = new GameServer();
+    }
+
+    // Open the socket to accept any incoming connection.
+    public void openConnections(){
         gameServer.acceptConnections();
     }
 
@@ -122,8 +131,8 @@ public class Game extends Canvas implements Runnable{
     public void run() {
         this.requestFocus();
         long lastTime = System.nanoTime();
-        double tps = 60.0;
-        double ns = 1000000000 / tps;
+        double ticksPerSecond = 60.0;
+        double ns = 1000000000 / ticksPerSecond;
         double accumulatedFrameTime = 0;
         long timer = System.currentTimeMillis();
         int frames = 0;

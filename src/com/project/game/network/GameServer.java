@@ -36,6 +36,9 @@ public class GameServer {
     public void acceptConnections(){
         try{
             Socket socket = serverSocket.accept();
+            // code below this needs to be seperate, as the code gets stuck waiting for a connection
+            // so the rest of code in UI class doesnt get executed.
+            // need to start game while it is waiting for socket.
             ServerSideConnection serverSideConnection = new ServerSideConnection(socket, numberOfPlayer);
             player1 = serverSideConnection;
             Thread thread = new Thread(serverSideConnection);

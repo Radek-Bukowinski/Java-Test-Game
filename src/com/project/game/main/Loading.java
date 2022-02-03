@@ -25,8 +25,6 @@ public class Loading {
         this.game = game;
         this.renderer = renderer;
         playerObject = new Player(Game.WIDTH / 2 - 32, Game.HEIGHT / 2 - 32, 100, ID.Player, renderer, game , true);
-
-
     }
 
     public void tick()
@@ -56,6 +54,10 @@ public class Loading {
             game.windowSTATE = STATE.Game;
             game.initialiseLevel(game.currentLevel);
             renderer.addObject(playerObject);
+
+            if(game.multiplayerEnabled == true){
+                game.openConnections();
+            }
 
 
             /*
