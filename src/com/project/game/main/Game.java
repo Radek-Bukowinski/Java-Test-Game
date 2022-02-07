@@ -3,79 +3,77 @@ package com.project.game.main;
 import com.project.game.identifiers.ID;
 import com.project.game.identifiers.STATE;
 import com.project.game.network.GameServer;
-import com.project.game.objects.*;
+import com.project.game.objects.Block;
+import com.project.game.objects.Coin;
+import com.project.game.objects.Crate;
+import com.project.game.objects.Health;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.Random;
-import java.util.Timer;
 
 
 /*
 
 */
 
+// Game is part of the Canvas, and also uses threading
 public class Game extends Canvas implements Runnable{
+
+    // The size of the window, using maths we can keep it to a 16 by 9 aspect ratio.
     public static final int WIDTH = 1280, HEIGHT = WIDTH / 16 * 9;
 
+    // Set initial state of the window
     public static STATE windowSTATE = STATE.Menu;
-    //public static MODE gameMODE = MODE.Other;
 
     private STATE currentSTATE;
     private STATE lastSTATE = currentSTATE;
 
+    // Set initial level
     public String currentLevel = "/level_zero.png";
 
+    // Create a thread
     private Thread thread;
     private boolean running = false;
 
-    private GameServer gameServer;
-
-    private Random random = new Random();
+    // Declare instances of classes
     private RendererHandler renderer;
-    private Spawner spawner;
     private HUD hud;
     private UI ui;
     private KeyInput keyInput;
     private Loading loading;
     private Camera camera;
+    private GameServer gameServer;
 
+    // For now current level is null
     private BufferedImage level = null;
-    private BufferedImage background = null;
 
-    static int frames = 0;
-
+    // Game is not paused
     static boolean paused = false;
-    private static int ticks = 0;
 
-    public boolean DEBUG = false;
+    // Do not use DEBUG mode
+    public static boolean DEBUG = false;
 
+    // Multiplayer has not been selected yet, so it is false
     public boolean multiplayerEnabled = false;
 
-    Timer timer;
-
-    //Runner runner = new Runner();
-
-    public boolean isInitialised = false;
-
     public Game() {
-
+        // Create new instances of classes
         renderer = new RendererHandler();
         camera = new Camera(0, 0);
         ui = new UI(this, renderer, camera);
         keyInput = new KeyInput(renderer);
+        loading = new Loading(this, renderer);
+        hud = new HUD();
 
+        // Add all of these input listeners, so the program can actually process any inputs
         this.addKeyListener(keyInput);
         this.addMouseListener(ui);
         this.addMouseMotionListener(ui);
 
-
+        // Create a new window, and apply it to this class
         new Window(WIDTH, HEIGHT, "Game", this);
-        loadBackground();
-        loading = new Loading(this, renderer);
-
-        hud = new HUD();
     }
 
     // Create a new server
@@ -95,11 +93,7 @@ public class Game extends Canvas implements Runnable{
         loadLevel(level);
     }
 
-    public void loadBackground(){
-        BufferedImageLoader bufferedImageLoader = new BufferedImageLoader();
-        background = bufferedImageLoader.loadImage("/background.png");
-    }
-
+    // Returns a random number, between the maximum and minimum values
     public static int getRandomNumber(int min, int max) {
         Random random = new Random();
         return random.ints(min, max)
@@ -107,17 +101,20 @@ public class Game extends Canvas implements Runnable{
                 .getAsInt();
     }
 
+    // Returns a random number from an array
     public static int getRandomIntFromArray(int[] array) {
         int random = new Random().nextInt(array.length);
         return array[random];
     }
 
+    // The class utilises threading, this is the function used to actually start it
     public synchronized void start() {
         thread = new Thread(this);
         thread.start();
         running = true;
     }
 
+    // In case we need to stop the thread
     public synchronized void stop() {
         try {
             thread.join();
@@ -131,16 +128,20 @@ public class Game extends Canvas implements Runnable{
     public void run() {
         this.requestFocus();
         long lastTime = System.nanoTime();
+        // Set the ticks per second.
         double ticksPerSecond = 60.0;
         double ns = 1000000000 / ticksPerSecond;
         double accumulatedFrameTime = 0;
         long timer = System.currentTimeMillis();
         int frames = 0;
 
+        // As long as the game is running, this forms the basis of the game loop
         while(running){
             long now = System.nanoTime();
             accumulatedFrameTime += (now - lastTime) / ns;
             lastTime = now;
+
+            // If accumulatedFrameTime is less than one, we can call these functions
             while(accumulatedFrameTime >= 1){
                 tick();
                 render();
@@ -148,21 +149,24 @@ public class Game extends Canvas implements Runnable{
                 accumulatedFrameTime = 0;
             }
 
+            // Print the amount of frames per second
             if(System.currentTimeMillis() - timer > 1000){
                 timer += 1000;
-                System.out.println(frames);
+                System.out.println("FPS: " + frames);
                 frames = 0;
             }
         }
     }
 
     private void tick() {
+        // Based on the current window state, what should be ticked? Provided that game is not paused
         if(!paused) {
             if (windowSTATE == STATE.Game) {
                 //hud.tick();
                 renderer.tick();
                 for(int i = 0; i < renderer.objects.size(); i++) {
                     if (renderer.objects.get(i).getId() == ID.Player) {
+                        // Pass the player as an object to the camera
                         camera.tick(renderer.objects.get(i));
                     }
                 }
@@ -181,29 +185,31 @@ public class Game extends Canvas implements Runnable{
     }
 
     private void render() {
+
+        // Create a buffer strategy
         BufferStrategy bufferStrategy = this.getBufferStrategy();
         if(bufferStrategy == null) {
             this.createBufferStrategy(3);
             return;
         }
+
+        // Create the graphics variable
+        // This can then be passed to be used to all of the other render functions
         Graphics graphics = bufferStrategy.getDrawGraphics();
         Graphics2D graphics2D = (Graphics2D) graphics;
 
+        // Create the background
         graphics.setColor(Color.black);
         graphics.fillRect(0, 0, WIDTH, HEIGHT);
-        //graphics.drawImage(background, WIDTH, HEIGHT, null);
 
+        // Add functionality to the camera, make sure that what is rendered also moves
         graphics2D.translate(-camera.getX(), -camera.getY());
 
-
         graphics.setColor(Color.black);
         graphics.fillRect(0, 0, WIDTH, HEIGHT);
 
+        // Based on the current state of the game, what should be rendered? Provided that game is not paused
         if(!paused) {
-            if (windowSTATE == STATE.Game) {
-                //hud.render(graphics);
-            }
-
             if (windowSTATE == STATE.Menu || windowSTATE == STATE.Death || windowSTATE == STATE.Info || windowSTATE == STATE.ModeSelect || windowSTATE == STATE.MultiplayerSelect) {
                 ui.render(graphics);
             }
@@ -217,7 +223,11 @@ public class Game extends Canvas implements Runnable{
             ui.render(graphics);
         }
         renderer.render(graphics);
+
+        // Again making sure the camera moves
         graphics2D.translate(camera.getX(), camera.getY());
+
+        // This has to be outside the translate functionality, as we want it to stay in the same place on the screen
         if(!paused){
             if(windowSTATE == STATE.Game){
                 hud.render(graphics);
@@ -227,6 +237,14 @@ public class Game extends Canvas implements Runnable{
         bufferStrategy.show();
     }
 
+    /*
+        The loadLevel function
+        Take in an image as an input
+        For the entire height and width of it, process every pixel
+        Interpret the individual RGB values of the pixel
+        If the pixels RGB values match an if statement, we can interpret that pixel as an object
+        Then add the object into the game
+    */
     private void loadLevel(BufferedImage bufferedImage){
         int width = bufferedImage.getWidth();
         int height = bufferedImage.getHeight();
@@ -267,7 +285,8 @@ public class Game extends Canvas implements Runnable{
         }
     }
 
-    // We can use this t
+    // We can use this to limit expanding or contracting values to not go beyond certain amounts
+    // This is useful to prevent the user from easily breaking the game
     public static int constrain(int value, int minimum, int maximum) {
         if(value >= maximum) {
             return value = maximum;
@@ -280,6 +299,7 @@ public class Game extends Canvas implements Runnable{
         }
     }
 
+    // Initialise the game
     public static void main(String args[]) {
         new Game();
     }

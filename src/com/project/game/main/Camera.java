@@ -1,6 +1,8 @@
 package com.project.game.main;
 
 public class Camera {
+
+    // Camera only needs an x and y value, as all we are concerned with is its position
     private float x;
     private float y;
 

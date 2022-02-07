@@ -4,11 +4,16 @@ import java.awt.*;
 import java.util.LinkedList;
 
 public class RendererHandler {
+
+    // Create all the different lists for storing objects
     public LinkedList<GameObject> objects = new LinkedList<GameObject>();
     public LinkedList<GameObject> enemies = new LinkedList<GameObject>();
     public LinkedList<GameObject> collidibles = new LinkedList<GameObject>();
+    public LinkedList<GameObject> collectibles = new LinkedList<GameObject>();
+
     public LinkedList<GameObject> spawners = new LinkedList<GameObject>();
 
+    // Go through the entire list and update every object
     public void tick() {
         for(int i = 0; i < objects.size(); i++) {
             GameObject temporaryObject = objects.get(i);
@@ -20,6 +25,7 @@ public class RendererHandler {
         }
     }
 
+    // Go through the entire list and update every object
     public void render(Graphics graphics) {
         for(int i = 0; i < objects.size(); i++) {
             GameObject temporaryObject = objects.get(i);
@@ -30,6 +36,10 @@ public class RendererHandler {
             enemyObject1.render(graphics);
         }
     }
+
+    /*
+        Functions to add and remove objects from the lists
+    */
 
     public GameObject addObject(GameObject object) {
         this.objects.add(object);
@@ -65,6 +75,15 @@ public class RendererHandler {
 
     public void removeSpawner(GameObject object) {
         this.spawners.remove(object);
+    }
+
+    public GameObject addCollectible(GameObject object) {
+        this.collectibles.add(object);
+        return object;
+    }
+
+    public void removeCollectible(GameObject object) {
+        this.collectibles.remove(object);
     }
 
 }

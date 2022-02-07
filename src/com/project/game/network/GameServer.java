@@ -16,8 +16,10 @@ public class GameServer {
     private ServerSideConnection player1;
 
     public GameServer(){
+        // There are no players yet, so this has to be 0
         numberOfPlayer = 0;
         try{
+            // Create a new server socket
             serverSocket = new ServerSocket(8008);
         }catch (IOException ioException){
             ioException.printStackTrace();
@@ -35,11 +37,11 @@ public class GameServer {
 
     public void acceptConnections(){
         try{
+            // Accept an incoming connection to the server
             Socket socket = serverSocket.accept();
-            // code below this needs to be seperate, as the code gets stuck waiting for a connection
-            // so the rest of code in UI class doesnt get executed.
-            // need to start game while it is waiting for socket.
+            // Create a new server side connection, which is just the data streams essentially.
             ServerSideConnection serverSideConnection = new ServerSideConnection(socket, numberOfPlayer);
+            // Assign a connection to the player
             player1 = serverSideConnection;
             Thread thread = new Thread(serverSideConnection);
             thread.start();
@@ -58,6 +60,7 @@ public class GameServer {
             socket = inputSocket;
             playerID = id;
             try{
+                // Create in and out streams of data, so that client and server can communicate
                 dataInputStream = new DataInputStream(socket.getInputStream());
                 dataOutputStream = new DataOutputStream(socket.getOutputStream());
             } catch (IOException ioException){

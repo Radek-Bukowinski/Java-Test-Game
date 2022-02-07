@@ -16,7 +16,6 @@ import com.project.game.objects.Projectile;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -30,9 +29,11 @@ public class UI extends MouseAdapter {
     private Camera camera;
     private Loading loading;
 
+    // Set the predetermined fonts and sizes to be used
     Font font = new Font("Arial", 1, 20);
     Font largeFont = new Font("Arial", 1, 40);
 
+    // Set the different colours of buttons
     private Color startButtonColor = Color.white;
     private Color infoButtonColor = Color.white;
     private Color exitButtonColor = Color.white;
@@ -54,6 +55,7 @@ public class UI extends MouseAdapter {
         }
     }
 
+    // Set button colours back to their original state
     private void resetButtonColors(){
         startButtonColor = Color.white;
         infoButtonColor = Color.white;
@@ -61,6 +63,7 @@ public class UI extends MouseAdapter {
         backButtonColor = Color.white;
     }
 
+    // Create a scheduled executor, that will allow us to use certain runnable functions
     ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
     /*
@@ -84,9 +87,12 @@ public class UI extends MouseAdapter {
     @Override
     public void mousePressed(MouseEvent event){
         super.mousePressed(event);
+
+        // Where the mouse is in relation to the camera and screen
         int mouseX = (int) (event.getX() + camera.getX());
         int mouseY = (int) (event.getY() + camera.getY());
 
+        // Where the mouse is only on the screen
         int realMouseX = (int) event.getX();
         int realMouseY  = (int) event.getY();
 
@@ -101,6 +107,8 @@ public class UI extends MouseAdapter {
             }
         }
 
+        // If the mouse has been pressed and is over a certain area, we can determine a button has been pressed
+        // We again we use the window state to determine what buttons are available to us to use
         if(game.windowSTATE == STATE.ModeSelect) {
             resetButtonColors();
             //singleplayer button
@@ -194,6 +202,7 @@ public class UI extends MouseAdapter {
     }
 
 
+    // Essentially a setter for the window state
     private static STATE updateState(STATE state) {
         Game.windowSTATE = state;
         return state;
@@ -202,9 +211,13 @@ public class UI extends MouseAdapter {
     @Override
     public void mouseMoved(MouseEvent event){
         super.mouseMoved(event);
+
+        // Get the mouse position, where it is on the screen
         int mouseX = event.getX();
         int mouseY = event.getY();
-            
+
+        // We use the fact the mouse has moved, and if it inside a certain area to highlight that button
+        // We again use the window state to determine what buttons are available to us
         if(game.windowSTATE == STATE.ModeSelect){
 
             //Singleplayer Button
@@ -311,8 +324,12 @@ public class UI extends MouseAdapter {
         } else { return false; }
     }
 
+    // Nothing needs to be updated, so we don't use the tick function
     public void tick() { }
 
+
+    // Here we set out out the buttons and text to be rendered
+    // We use the window state to determine what screen should be shown, and therefore what buttons and text need to be drawn.
     public void render(Graphics graphics) {
         if(game.windowSTATE == STATE.Menu) {
             graphics.setColor(Color.white);
@@ -378,14 +395,14 @@ public class UI extends MouseAdapter {
             graphics.drawString("Java Game", 540, 100);
 
             graphics.setFont(font);
-            graphics.drawString("By: Radek", 590, 130);
 
-            graphics.drawString("This is a basic game created by Radek, coded in Java.", 410, 300);
-            graphics.drawString("To play, you must dodge the enemies whilst, attempting to shoot at them.", 330, 330);
-            graphics.drawString("If you collide with an enemy, you lose health.", 460, 360);
-            graphics.drawString("The longer you play the more enemies will spawn, each with higher difficulty.", 320, 390);
-            graphics.drawString("Reminder: The Game is still in development, there will be bugs.", 330, 420);
-            graphics.drawString("Good Luck and Have Fun!", 490, 450);
+            graphics.setColor(startButtonColor);
+            graphics.drawRect(640 - 100, 340 - 25, 200, 40);
+            graphics.drawString("Difficulty: Easy", 590, 342);
+
+            graphics.setColor(infoButtonColor);
+            graphics.drawRect(640 - 100, 400 - 25, 200, 40);
+            graphics.drawString("Volume: Low", 590, 402);
 
             graphics.setColor(backButtonColor);
             graphics.drawRect(640 - 100, 650 - 25, 200, 40);
@@ -396,6 +413,11 @@ public class UI extends MouseAdapter {
             for(int i = 0; i < renderer.objects.size(); i++) {
                 GameObject temporaryObject = renderer.objects.get(i);
                 renderer.removeObject(temporaryObject);
+            }
+
+            for(int i = 0; i < renderer.enemies.size(); i++) {
+                GameObject temporaryObject2 = renderer.enemies.get(i);
+                renderer.removeEnemy(temporaryObject2);
             }
 
             graphics.setColor(Color.white);

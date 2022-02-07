@@ -14,6 +14,8 @@ public class Coin extends GameObject {
 
     public Coin(float x, float y, int health, ID id, boolean isCollidible) {
         super(x, y, health, id, isCollidible);
+
+        // Get the texture
         bufferedImage = bufferedImageLoader.loadImage("/coin.png");
     }
 
@@ -21,10 +23,9 @@ public class Coin extends GameObject {
     public void tick() {
     }
 
+    // Draw the texture
     @Override
     public void render(Graphics graphics) {
-        graphics.setColor(Color.orange);
-        //graphics.fillRect((int) x, (int) y, 32, 32);
         graphics.drawImage(bufferedImage, (int) x, (int) y, null);
     }
 

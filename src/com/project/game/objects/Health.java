@@ -15,6 +15,7 @@ public class Health extends GameObject {
 
         public Health(float x, float y, int health, ID id, boolean isCollidible) {
             super(x, y, health, id, isCollidible);
+            // Get the image
             bufferedImage = bufferedImageLoader.loadImage("/health.png");
         }
 
@@ -24,8 +25,7 @@ public class Health extends GameObject {
 
         @Override
         public void render(Graphics graphics) {
-            graphics.setColor(Color.orange);
-            //graphics.fillRect((int) x, (int) y, 32, 32);
+            // Draw the image
             graphics.drawImage(bufferedImage, (int) x, (int) y, null);
         }
 

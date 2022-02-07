@@ -3,18 +3,25 @@ package com.project.game.main;
 import java.awt.*;
 
 public class HUD {
-    public static int health = 100;
+
+    // Used to determine hud health colour
     private int colorValue = 255;
+
+    // Set the values to be displayed
+    public static int health = 100;
     public static int score = 0;
     static int level = 1;
     private String version = "Alpha 0.0.5";
 
+    // Update the values
     public void tick(){
+        // Make sure health doesn't go outside of its designated place, and that it doesnt't go to unrealistic values
         health = Game.constrain(health, 0, 100);
         colorValue = Game.constrain(colorValue, 0, 255);
         colorValue = health * 2;
     }
 
+    // Draw the boxes and text required
     public void render(Graphics graphics) {
         graphics.setColor(Color.gray);
         graphics.fillRect(15,15,300,25);

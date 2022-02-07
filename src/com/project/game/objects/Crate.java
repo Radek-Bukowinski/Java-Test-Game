@@ -12,10 +12,10 @@ public class Crate extends GameObject {
     private BufferedImage bufferedImage;
     private BufferedImageLoader bufferedImageLoader = new BufferedImageLoader();
 
-    Color brown = new Color(127, 51, 0);
-
     public Crate(float x, float y, int health, ID id, boolean isCollidible) {
         super(x, y, health, id, isCollidible);
+
+        // Get the texture
         bufferedImage = bufferedImageLoader.loadImage("/crate.png");
     }
 
@@ -24,10 +24,9 @@ public class Crate extends GameObject {
 
     }
 
+    //Draw the texture
     @Override
     public void render(Graphics graphics) {
-        graphics.setColor(brown);
-        //graphics.fillRect((int) x, (int) y, 32, 32);
         graphics.drawImage(bufferedImage, (int) x, (int) y, null);
     }
 

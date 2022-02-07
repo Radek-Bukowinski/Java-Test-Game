@@ -15,6 +15,7 @@ public class Block extends GameObject {
 
     public Block(float x, float y, int health, ID id, boolean isCollidible) {
         super(x, y, health, id, isCollidible);
+        // Get the textrure
         bufferedImage = bufferedImageLoader.loadImage("/block.png");
     }
 
@@ -23,10 +24,9 @@ public class Block extends GameObject {
 
     }
 
+    // Draw texture
     @Override
     public void render(Graphics graphics) {
-        graphics.setColor(Color.lightGray);
-        //graphics.fillRect((int) x, (int) y, 32, 32);
         graphics.drawImage(bufferedImage, (int) x, (int) y, null);
     }
 

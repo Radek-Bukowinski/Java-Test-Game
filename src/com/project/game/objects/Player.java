@@ -10,7 +10,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.Random;
 
 import static com.project.game.main.Spawner.enemyCount;
 
@@ -174,7 +173,9 @@ public class Player extends GameObject {
         
         public ClientSideConnection(){
             try{
+                // Create a new socket
                 socket = new Socket("localhost", 51734);
+                // Create new data in and out streams for communicating
                 dataInputStream = new DataInputStream(socket.getInputStream());
                 dataOutputStream = new DataOutputStream(socket.getOutputStream());
             } catch(IOException ioException){

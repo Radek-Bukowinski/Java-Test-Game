@@ -1,10 +1,7 @@
 package com.project.game.objects;
 
 import com.project.game.identifiers.ID;
-import com.project.game.main.BufferedImageLoader;
-import com.project.game.main.Game;
-import com.project.game.main.GameObject;
-import com.project.game.main.RendererHandler;
+import com.project.game.main.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -30,14 +27,6 @@ public class Enemy extends GameObject {
         this.uid = uid;
     }
 
-    public void getPlayer() {
-        for (int i = 0; i < renderer.objects.size(); i++) {
-            if (renderer.objects.get(i).getId() == ID.Player) {
-                PLAYER = renderer.objects.get(i);
-                break;
-            }
-        }
-    }
 
     private GameObject ENEMY = null;
     public void getEnemy() {
@@ -49,14 +38,21 @@ public class Enemy extends GameObject {
         }
     }
 
-    int[] possibleVelocities = {-1, 1};
+    // An array with the possible velocities for the enemy
+    int[] possibleVelocities = {
+            -1, 1
+    };
 
     public Enemy(float x, float y, int health, ID id, RendererHandler renderer, int uid, boolean isCollidible) {
         super(x, y, health, id, isCollidible);
         this.renderer = renderer;
         this.uid = uid;
+
+        // The velocity is random, enemy can move anywhere. Will move in a straight line once spawned
         velocityY = Game.getRandomIntFromArray(possibleVelocities);
         velocityX = Game.getRandomIntFromArray(possibleVelocities);
+
+        // Get the texture
         bufferedImage = bufferedImageLoader.loadImage("/enemy.png");
     }
 
@@ -69,130 +65,50 @@ public class Enemy extends GameObject {
     }
 
     private void collision() {
-        for (int i = 0; i < renderer.objects.size(); i++) {
-            GameObject temporaryObject = renderer.objects.get(i);
+        for (int i = 0; i < renderer.collidibles.size(); i++) {
+            GameObject temporaryObject = renderer.collidibles.get(i);
+            // If an enemy object intersects a block or crate
             if (temporaryObject.getId() == ID.Block || temporaryObject.getId() == ID.Crate) {
                 if (this.getBounds().intersects(temporaryObject.getBounds())) {
-                    //System.out.println("collision detected");
                     if (horizontalCollision().intersects(temporaryObject.getBounds())) {
                         if (velocityX > 0) {
+                            // Reflect
                             velocityX *= -1;
-                            //x = temporaryObject.getX() - 32;
                         } else if (velocityX < 0) {
+                            // Reflect
                             velocityX *= -1;
-                            //x = temporaryObject.getX() + 32;
                         }
                     }
 
                     if (verticalCollision().intersects(temporaryObject.getBounds())) {
                         if (velocityY > 0) {
+                            // Reflect
                             velocityY *= -1;
-                            //y = temporaryObject.getY() - 32;
                         } else if (velocityY < 0) {
+                            // Reflect
                             velocityY *= -1;
-                            //y = temporaryObject.getY() + 32;
                         }
                     }
                 }
             }
+            /*
                 if(temporaryObject.getId() == ID.Player){
                     if (temporaryObject.getBounds().intersects(this.getBounds())) {
                         temporaryObject.setHealth(temporaryObject.getHealth() - 2);
                     }
                 }
-        }
-
-
-        /*
-        for (int i = 0; i < renderer.objects.size(); i++) {
-            GameObject temporaryObject = renderer.objects.get(i);
-            if (temporaryObject.getId() == ID.Block || temporaryObject.getId() == ID.Crate) {
-                if (this.getBounds().intersects(temporaryObject.getBounds())) {
-                    //System.out.println("collision detected");
-                    if (horizontalCollision().intersects(temporaryObject.getBounds())) {
-                        if (velocityX > 0) {
-                            velocityX *= -1;
-                            //x = temporaryObject.getX() - 32;
-                        } else if (velocityX < 0) {
-                            velocityX *= -1;
-                            //x = temporaryObject.getX() + 32;
-                        }
-                    }
-
-                    if (verticalCollision().intersects(temporaryObject.getBounds())) {
-                        if (velocityY > 0) {
-                            velocityY *= -1;
-                            //y = temporaryObject.getY() - 32;
-                        } else if (velocityY < 0) {
-                            velocityY *= -1;
-                            //y = temporaryObject.getY() + 32;
-                        }
-                    }
-                }
-            }
-        }
-
-         */
-
-        /*
-        if(Game.windowSTATE == STATE.Game) {
-            for (int x = 0; x < renderer.objects.size(); x++) {
-                GameObject enemyObject = renderer.objects.get(x);
-                if (enemyObject.getId() == ID.Enemy) {
-                    //System.out.println("PLAYER FOUND");
-                    for (int i = 0; i < renderer.objects.size(); i++) {
-                        GameObject temporaryObject = renderer.objects.get(i);
-                        if (temporaryObject.getId() == ID.Block || temporaryObject.getId() == ID.Crate || temporaryObject.getId() == ID.Coin) {
-                            //System.out.println("BLOCK FOUND");
-                            if (enemyObject.getBounds().intersects(temporaryObject.getBounds())) {
-                                //System.out.println("collision detected");
-                                if (horizontalCollision().intersects(temporaryObject.getBounds())) {
-                                    if (velocityX > 0) {
-                                        velocityX *= -1;
-                                        //x = temporaryObject.getX() - 32;
-                                    } else if (velocityX < 0) {
-                                        velocityX *= -1;
-                                        //x = temporaryObject.getX() + 32;
-                                    }
-                                }
-
-                                if (verticalCollision().intersects(temporaryObject.getBounds())) {
-                                    if (velocityY > 0) {
-                                        velocityY *= -1;
-                                        //y = temporaryObject.getY() - 32;
-                                    } else if (velocityY < 0) {
-                                        velocityY *= -1;
-                                        //y = temporaryObject.getY() + 32;
-                                    }
-                                }
-                            }
-
-                            //break;
-                        }
-
-                    }
-                }
-            }
-
-         */
-
-            /*
-            if (PLAYER != null) {
-
-                if (ENEMY != null) {
-                    if (PLAYER.getBounds().intersects(ENEMY.getBounds())) {
-                        PLAYER.setHealth(PLAYER.getHealth() - 2);
-                    }
-                }else{
-                    getEnemy();
-                }
 
              */
+        }
 
-
-
+        // If an enemy collides with the player
+        if(Loading.playerObject.getBounds().intersects(this.getBounds())){
+            // Lower the players health
+            Loading.playerObject.setHealth(Loading.playerObject.getHealth() - 1);
+        }
     }
 
+    // Use this hitbox for testing for collision if is horizontal
     public Rectangle horizontalCollision(){
         float boundaryX = x + velocityX;
         float boundaryY = y + 2;
@@ -202,6 +118,7 @@ public class Enemy extends GameObject {
         return new Rectangle((int) boundaryX, (int) boundaryY, (int) boundaryWidth, (int) boundaryHeight);
     }
 
+    // Use this hitbox for testing for collision if is vertical
     public Rectangle verticalCollision(){
         float boundaryX = x + 2;
         float boundaryY = y + velocityY;
@@ -213,9 +130,9 @@ public class Enemy extends GameObject {
 
     @Override
     public void render(Graphics graphics) {
+        // Make sure enemy isn't null first
         if(ENEMY != null) {
-            graphics.setColor(Color.RED);
-            //graphics.fillRect((int) x, (int) y, 16, 16);
+            // Draw the image
             graphics.drawImage(bufferedImage, (int) x, (int) y, null);
         }else{
             getEnemy();

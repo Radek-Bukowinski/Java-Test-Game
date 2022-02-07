@@ -24,6 +24,8 @@ public class Loading {
     {
         this.game = game;
         this.renderer = renderer;
+
+        // Creates a new player object, that can then be added into the game.
         playerObject = new Player(Game.WIDTH / 2 - 32, Game.HEIGHT / 2 - 32, 100, ID.Player, renderer, game , true);
     }
 
@@ -31,8 +33,11 @@ public class Loading {
     {
         progressLevel = Game.constrain(progressLevel, 80, 1100);
         ticks++;
+
+        // Increase the progress amount by 20 every tick
         progressLevel += 20;
-        
+
+        // Update the string while the game loads
         if((progressLevel % 100) == 0) {
             if(Math.floor(progressLevel / 100) == 0){
                 loadingString = "Loading";
@@ -50,6 +55,7 @@ public class Loading {
             }
         }
 
+        // Once fully loaded, initialise necessary components and multiplayer if that option has been selected.
         if(progressLevel == 1100) {
             game.windowSTATE = STATE.Game;
             game.initialiseLevel(game.currentLevel);
@@ -58,29 +64,10 @@ public class Loading {
             if(game.multiplayerEnabled == true){
                 game.openConnections();
             }
-
-
-            /*
-            renderer.addObject(new Spawner((int) (playerObject.getX() + 64), (int) (playerObject.getY()), 100, ID.Spawner, renderer, 1, true));
-            renderer.addSpawner(new Spawner((int) (playerObject.getX() + 64), (int) (playerObject.getY()), 100, ID.Spawner, renderer, 1, true));
-
-            renderer.addObject(new Spawner((int) (playerObject.getX() - 64), (int) (playerObject.getY()), 100, ID.Spawner, renderer, 2, true));
-            renderer.addSpawner(new Spawner((int) (playerObject.getX() - 64), (int) (playerObject.getY()), 100, ID.Spawner, renderer, 2, true));
-
-
-            renderer.addObject(new Spawner((int) (playerObject.getX()), (int) (playerObject.getY() + 64), 100, ID.Spawner, renderer, 3, true));
-            renderer.addSpawner(new Spawner((int) (playerObject.getX()), (int) (playerObject.getY() + 64), 100, ID.Spawner, renderer, 3, true));
-
-
-            renderer.addObject(new Spawner((int) (playerObject.getX()), (int) (playerObject.getY() - 64), 100, ID.Spawner, renderer, 4, true));
-            renderer.addSpawner(new Spawner((int) (playerObject.getX()), (int) (playerObject.getY() - 64), 100, ID.Spawner, renderer, 4, true));
-            */
-
-            //renderer.addObject(new Enemy(random.nextInt(Game.WIDTH) - 100, random.nextInt(Game.HEIGHT) - 100, 100, ID.Enemy, renderer));
-            //renderer.addObject(new Enemy(random.nextInt(Game.WIDTH) - 100, random.nextInt(Game.HEIGHT) - 100, 100, ID.Enemy, renderer));
         }
     }
 
+    // Draw all the components
     public void render(Graphics graphics)
     {
         graphics.setColor(white);
@@ -100,6 +87,10 @@ public class Loading {
         graphics.fillRect(80, 640, progressLevel, 20);
     }
 
+
+    /*
+        Getter and setter for determining if multiplayer is host or join
+    */
     public String getMultiplayerStateString() {
         return multiplayerStateString;
     }
